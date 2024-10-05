@@ -27,8 +27,14 @@
 * Everything is completely open source
 
 # How to play Kitty City
+### Method one
 1. Read https://candyman.pink/kitty-city/tutorial.html
 2. Subscribe to https://www.youtube.com/@ScroogeMcCat
 3. Visit https://candyman.pink/kitty-city
 4. Create an account
 5. Enjoy!
+
+### Method two
+1. Clone the repository (use git clone)
+2. Run it on localhost (use python3 -m http.server 8080)
+3. Enjoy!

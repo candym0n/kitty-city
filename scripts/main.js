@@ -1,15 +1,23 @@
 import Graphics from "./graphics/graphics.js";
-import Cats from "./media/cats.js";
+import LoadingScene from "./scenes/loading.js";
 
-// Init the graphics
-Graphics.Init();
+LoadingScene.Load();
 
-// Load cat images
-Cats.LoadImages();
+let prevTime = 0;
+let dt = 0;
 
-// Draw a cat :)
-function main() {
-    Graphics.DrawImage(Cats.images[Cats.SANTA_CAT], 50, 50);
+function update(time) {
+    requestAnimationFrame(update);
+
+    // Calculate delta time
+    dt = time - prevTime;
+    prevTime = time;
+
+    // Reset everything
+    Graphics.Clear();
+    Graphics.ResetTranslationMatrix();
+
+    LoadingScene.Update(dt);
 }
 
-Cats.AddCallback(main);
+requestAnimationFrame(update);

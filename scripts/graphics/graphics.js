@@ -1,3 +1,5 @@
+import Camera from "./camera.js";;
+
 export default class Graphics {
     // The canvas that is used for all graphics
     static canvas = document.querySelector("#canvas");
@@ -7,11 +9,17 @@ export default class Graphics {
     static HEADER_HEIGHT =  document.querySelector("header").getBoundingClientRect().height;
     static FOOTER_HEIGHT = document.querySelector("footer").getBoundingClientRect().height;
 
+    // The camera used for graphics
+    static camera = new Camera(0, 0);
+
     // Init the graphics
     static Init() {
         // Resize the canvas
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight - this.HEADER_HEIGHT - this.FOOTER_HEIGHT;
+
+        // Disable antialiasing
+        this.c.imageSmoothingEnabled = false;
     }
 
     // Draw a single image
@@ -28,7 +36,32 @@ export default class Graphics {
     }
 
     // Clear the canvas
-    static Clear() {
-        this.c.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    static Clear(color) {
+        if (color) {
+            this.c.fillStyle = color;
+            this.c.fillRect(this.camera.x, this.camera.y, this.canvas.width, this.canvas.height);
+        } else {
+            this.c.clearRect(this.camera.x, this.camera.y, this.canvas.width, this.canvas.height);
+        }
+    }
+
+    // Move everything away from the camera
+    static ResetTranslationMatrix() {
+        this.c.setTransform(1, 0, 0, 1, -this.camera.x, -this.camera.y);
+    }
+
+    // Translate the matrix relative to the camera
+    static MoveRelativeToCamera() {
+        this.c.translate(-this.camera.x, -this.camera.y);
+    }
+
+    // Reset the translation matrix to a position
+    static SetTranslate(x, y) {
+        this.c.setTransform(1, 0, 0, 1, x, y);
+    }
+
+    // Show or hide the canvas
+    static Display(display) {
+        this.canvas.style.display = display ? "block" : "none";
     }
 }
