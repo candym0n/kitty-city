@@ -4,12 +4,12 @@ export default class Scene {
 
     }
 
-    // Called at the start of the game
+    // Called when it is switched to this scene, or if this is the first scene
     static Load() {
 
     }
 
-    // A function for initializing, called by load
+    // A function for initializing, called by Load
     static Init() {
 
     }

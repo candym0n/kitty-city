@@ -16,6 +16,9 @@ export default class Camera {
     // Is it dragging?
     #drag = false;
 
+    // The last key that was pressed
+    #key = null;
+
     constructor(x=0, y=0) {
         this.x = x;
         this.y = y;
@@ -53,6 +56,8 @@ export default class Camera {
 
         this.#startX = this.x;
         this.#startY = this.y;
+
+        this.#key = "";
     }
 
     MouseUp(x, y) {
@@ -74,6 +79,36 @@ export default class Camera {
         // Apply transformation to the camera
         this.x = this.#startX + deltaX;
         this.y = this.#startY + deltaY;
+        this.Clamp();
+    }
+
+    KeyDown(key) {
+        // Cancel if it is dragging
+        if (this.#drag) return;
+
+        this.#key = key.toLowerCase();
+    }
+
+    KeyUp() {
+        this.#key = "";
+    }
+
+    HandleKeyboard() {
+        switch (this.#key) {
+            case "arrowup":
+                this.y -= 20;
+                break;
+            case "arrowdown":
+                this.y += 20;
+                break;
+            case "arrowright":
+                this.x += 20;
+                break;
+            case "arrowleft":
+                this.x -= 20;
+                break;
+        }
+        
         this.Clamp();
     }
 }

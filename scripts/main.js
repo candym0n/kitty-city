@@ -1,7 +1,19 @@
 import Graphics from "./graphics/graphics.js";
-import LoadingScene from "./scenes/loading.js";
+import EventHandler from "./ui/EventHandler.js";
 
-LoadingScene.Load();
+// Check if we are allowed to get rid of the GOD DAMN FOOTER
+let removeFooter = false;
+if (new URLSearchParams(location.search).get("hideFooter")) {
+    removeFooter = true;
+    document.querySelector("footer").remove();
+}
+
+// Init the graphics
+Graphics.Init(removeFooter);
+Graphics.camera.SetBoundaries(-10000, 10000, -10000, 10000);
+
+// Init the event handler
+EventHandler.Init();
 
 let prevTime = 0;
 let dt = 0;
@@ -17,7 +29,15 @@ function update(time) {
     Graphics.Clear();
     Graphics.ResetTranslationMatrix();
 
-    LoadingScene.Update(dt);
+    Graphics.UpdateScene(dt);
 }
 
 requestAnimationFrame(update);
+
+// Give a nice message
+console.log(`  _  ___ _   _            ____ _ _         
+ | |/ (_) |_| |_ _   _   / ___(_) |_ _   _ 
+ | ' /| | __| __| | | | | |   | | __| | | |
+ | . \| | |_| |_| |_| | | |___| | |_| |_| |
+ |_|\_\_|\__|\__|\__, |  \____|_|\__|\__, |
+                 |___/               |___/ `)

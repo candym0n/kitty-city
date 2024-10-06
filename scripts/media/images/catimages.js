@@ -1,16 +1,13 @@
-import { NUM_CATS } from "../constants.js";
-import MediaLoader from "./medialoader.js";
+import { NUM_CATS } from "../../constants.js";
+import ImageLoader from "./imageloader.js";
 
 // Yes, I named the cats
-export default class CatImages extends MediaLoader {
+export default class CatImages {
     // How many cats are there?
     static COUNT = NUM_CATS;
 
     // An array of all the images
     static images = [];
-
-    // The event to be fired
-    static eventString = "load";
 
     // A name for the cats
     static OG_CAT        = 0;
@@ -27,13 +24,10 @@ export default class CatImages extends MediaLoader {
     static CRANE_CAT     = 11;
     static SIMPLE_CAT    = 12;
 
-    // Load an image
-    static LoadMedia(i) {
-        let img = new Image();
-        img.src = "images/cats/" + i + ".png";
-        
-        this.images.push(img);
-
-        return img;
+    // Load the images
+    static Load() {
+        for (let i = 0; i < this.COUNT; ++i) {
+            this.images.push(ImageLoader.LoadImage("images/cats/" + i + ".png"));
+        }
     }
 }

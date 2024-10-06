@@ -54,7 +54,7 @@ export default class AudioManager {
     }
     static NextSong() {
         console.log("Next song!");
-        this.PauseBackgroundMusic();[]
+        this.PauseBackgroundMusic();
         this.backgroundMusic[this.backgroundMusicIndex].currentTime = 0;
         this.backgroundMusicIndex = (++this.backgroundMusicIndex) % this.backgroundMusic.length;
         this.backgroundMusic[this.backgroundMusicIndex].play();
