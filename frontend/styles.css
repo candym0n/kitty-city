@@ -1,0 +1,18 @@
+.vertical-divider {
+    height: 100%;
+    border-left: 1px solid #ccc;
+    position: absolute;
+    left: 50%;
+    top: 0;
+}
+
+.product {
+    width: 50px !important;
+    height: 50px;
+    margin: 10px;
+}
+
+.product-container {
+    display: flex;
+    align-items: left;
+}
