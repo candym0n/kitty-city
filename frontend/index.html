@@ -60,16 +60,43 @@
                           <div class="container-fluid">
                             <div class="row h-100">
                                 <div class="col-6 product-container">
-                                    <div class="product" id="build-item" role="button" aria-label="house">
+                                    <div class="select build-item" role="button" aria-label="house">
                                         <img src="images/buildings/house.png" />
                                     </div>
-                                    <div class="product" id="build-item" role="button" aria-label="work">
+                                    <div class="build-item" role="button" aria-label="work">
                                         <img src="images/buildings/work.png" />
+                                    </div>
+                                    <div class="build-item" role="button" aria-label="intersection">
+                                        <img src="images/buildings/intersection.png" />
                                     </div>
                                 </div>
                                 <div class="col-6 p-0">
                                     <div class="vertical-divider"></div>
-                                    I like CATS
+                                    <table class="table table-striped-columns">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Image</th>
+                                                <th>Description</th>
+                                                <th>Cost</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td id="building-name">House</td>
+                                                <td><img id="building-image" src="images/buildings/house.png" /></td>
+                                                <td id="building-description">The building that is the home of exactly one citizen. Destroying this building will also murder the citizen.</td>
+                                                <td id="building-cost">$100</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <form id="buyForm">
+                                        <label for="buildBuyCount">
+                                            How many?
+                                        </label>
+                                        <input id="buildBuyCount" class="form-control" type="number" min="1" max="100" step="1" value="1">
+                                        <button type="submit" class="btn btn-primary">Buy</button>
+                                    </form>
                                 </div>
                             </div>
                           </div>

@@ -8,7 +8,8 @@ export default class EventHandler {
         "mouseup": [],
         "mousemove": [],
         "keydown": [],
-        "keyup": []
+        "keyup": [],
+        "contextmenu": []
     };
 
     // Add a callback function
@@ -65,11 +66,17 @@ export default class EventHandler {
         });
         
         document.addEventListener("keydown", function(e) {
+            e.preventDefault();
             EventHandler.TriggerEvent("keydown", [e.key]);
         });
 
         document.addEventListener("keyup", function(e) {
             EventHandler.TriggerEvent("keyup", [e.key]);
         });
+
+        document.addEventListener("contextmenu", function(e) {
+            e.preventDefault();
+            EventHandler.TriggerEvent("contextmenu");
+        })
     }
 }

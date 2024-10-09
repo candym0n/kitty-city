@@ -7,6 +7,8 @@ export default class Building {
     static HOUSE = 0;
     static WORKPLACE = 1;
     static INTERSECTION = 2;
+    static NOTHING = 3;
+    static ROAD = 4;
 
     constructor(x, y, name, type) {
         // The position of the building
@@ -18,11 +20,26 @@ export default class Building {
 
         // The type of the building
         this.type = type;
+
+        // Building metadata
+        this.intersectionData = {};
+        this.houseData = {};
+        this.workData = {};
     }
 
     // Update the building
     Update(dt) {
         
+    }
+
+    // Load the neccessary metadata
+    static Load() {
+        fetch("http://localhost:3000/get-building?all=true").then((function(result) {
+            result = result.json();
+            this.intersectionData = result.find(a=>a.name == "Intersection");
+            this.houseData = result.find(a=>a.name == "House");
+            this.workData = result.find(a=>a.name == "Work");
+        }).bind(this));
     }
 
     // Draw a building at a certain location

@@ -5,7 +5,7 @@ export default class House extends Building {
         super(x, y, name,  Building.HOUSE);
     }
 
-    Update(dt) {
+    Draw() {
         // Draw the building
         Building.DrawBuilding(this.x, this.y, this.type);
     }

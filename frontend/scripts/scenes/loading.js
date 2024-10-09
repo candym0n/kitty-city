@@ -11,7 +11,7 @@ import EventHandler from "../ui/EventHandler.js";
 import { GAME_DELAY, MIN_LOAD, FADE_TIME } from "../constants.js";
 import Game from "./game.js";
 import Dashboard from "../ui/dashboard.js";
-
+import Building from "../buildings/building.js";
 
 export default class LoadingScene extends Scene {
     // We need images, audio, and at least for 500 ms
@@ -36,6 +36,7 @@ export default class LoadingScene extends Scene {
         BackgroundImages.Load();
         AudioManager.Load();
         Dashboard.Load();
+        Building.Load();
 
         // I mean, like, you gotta appreciate that spinning cat for at least a second!
         setTimeout(this.Init.bind(this), MIN_LOAD);
