@@ -1,4 +1,5 @@
 import Building from "../buildings/building.js";
+import BuildingManager from "../buildings/buildingmanager.js";
 import Game from "../scenes/game.js";
 
 export default class BuildModal {
@@ -55,10 +56,10 @@ export default class BuildModal {
             Game.money -= cost;
 
             // Set the game into a "building" state
-            Game.building = toBuy.ariaLabel == "house" ? Building.HOUSE :
+            let building =  toBuy.ariaLabel == "house" ? Building.HOUSE :
                             toBuy.ariaLabel == "work" ? Building.WORKPLACE :
                             Building.INTERSECTION;
-            Game.buildCount += count;
+            BuildingManager.AddBuildings(building, count);
         });
 
         // Make sure you have enough money
@@ -80,7 +81,7 @@ export default class BuildModal {
             if (this.value == "") {
                 this.value = 1;
             }
-        })
+        });
 
         // The products
         this.products.forEach(function(building) {

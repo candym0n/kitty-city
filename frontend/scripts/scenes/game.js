@@ -8,6 +8,7 @@ import Road from "../buildings/road.js";
 import Dashboard from "../ui/dashboard.js";
 import BuildModal from "../ui/buildModal.js";
 import Building from "../buildings/building.js";
+import BuildingManager from "../buildings/buildingmanager.js";
 
 export default class Game extends Scene {
     // The amount of time since the game has started
@@ -15,6 +16,11 @@ export default class Game extends Scene {
 
     // What are you currently building?
     static building = Building.NOTHING;
+
+    // Are you currently building something?
+    static get isBuilding() { 
+        this.building !== Building.NOTHING 
+    }
 
     // How much can you build right now?
     static buildCount = 0;
@@ -27,11 +33,6 @@ export default class Game extends Scene {
 
     // Are we building right now?
     static get isBuilding() {
-        // Just some error checking :)
-        if (this.buildCount == 0) {
-            this.building = Building.NOTHING;
-        }
-
         // Are we building (not) nothing?
         return this.building !== Building.NOTHING;
     }
@@ -60,7 +61,7 @@ export default class Game extends Scene {
     }
 
     static Init() {
-        this.testHouse = new House(100, 100, "John's apartment");
+
     }
 
     static Update(dt) {
@@ -82,9 +83,6 @@ export default class Game extends Scene {
 
         // Draw the background
         Graphics.DrawInfiniteBackground(BackgroundImages.GRASS);
-
-        // Draw a house.
-        this.testHouse.Draw();
 
         // Draw the current build
         this.DrawCurrentBuild();
@@ -113,14 +111,9 @@ export default class Game extends Scene {
         });
     }
 
-    // Build a building
-    static Build(building) {
-        
-    }
-
     // When the mouse is clicked
     static MouseDown(x, y) {
         // Check if we want to build something
-        if (this.isBuilding) this.Build(this.building);
+        if (this.isBuilding) BuildingManager.Build(this.building);
     }
 }

@@ -1,0 +1,1 @@
+1. It would be nice if for the building manager when you buy something instead of directly closing the build modal, it puts it onto this list of things to build

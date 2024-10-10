@@ -66,7 +66,7 @@ export default class EventHandler {
         });
         
         document.addEventListener("keydown", function(e) {
-            e.preventDefault();
+            //e.preventDefault();
             EventHandler.TriggerEvent("keydown", [e.key]);
         });
 
@@ -77,6 +77,6 @@ export default class EventHandler {
         document.addEventListener("contextmenu", function(e) {
             e.preventDefault();
             EventHandler.TriggerEvent("contextmenu");
-        })
+        });
     }
 }

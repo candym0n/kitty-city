@@ -35,7 +35,7 @@ export default class Building {
     // Load the neccessary metadata
     static Load() {
         fetch("http://localhost:3000/get-building?all=true").then((function(result) {
-            result = result.json();
+            result = Array.from(result.json());
             this.intersectionData = result.find(a=>a.name == "Intersection");
             this.houseData = result.find(a=>a.name == "House");
             this.workData = result.find(a=>a.name == "Work");
