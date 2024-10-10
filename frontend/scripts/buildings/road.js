@@ -1,7 +1,18 @@
 import { ROAD_WIDTH } from "../constants.js";
 import Graphics from "../graphics/graphics.js";
 
+// Remember, all a road is is a connection of two buildings
 export default class Road {
+    // Order should not and does not matter
+    constructor(one, two) {
+        this.one = one;
+        this.two = two;
+    }
+
+    Draw() {
+        Road.DrawRoad(this.one.x, this.one.y, this.two.x, this.two.y);
+    }
+
     // Draw a road
     static DrawRoad(x1, y1, x2, y2) {
         // Draw the black thing

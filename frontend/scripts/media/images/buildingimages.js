@@ -8,11 +8,13 @@ export default class BuildingImages {
     static HOUSE;
     static WORKPLACE;
     static INTERSECTION;
+    static ROAD;
 
     // Load the media
     static Load() {
         this.HOUSE = ImageLoader.LoadImage("images/buildings/house.png");
         this.WORKPLACE = ImageLoader.LoadImage("images/buildings/work.png");
         this.INTERSECTION = ImageLoader.LoadImage("images/buildings/intersection.png");
+        this.ROAD = ImageLoader.LoadImage("images/buildings/road.png");
     }
 }

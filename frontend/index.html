@@ -47,57 +47,19 @@
         <main id="main">
             <section style="padding-top:70px; padding-bottom:0px;">
                 <canvas id="canvas"></canvas>
-
-                <!-- The Build Pop-up -->
-                <div class="modal fade" id="buildModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <!-- The Settings Modal -->
+                <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLongTitle">Buildings</h5>
-                          <button id="close-build" type="button" class="btn-close"></button>
+                          <h5 class="modal-title" id="exampleModalLongTitle">Settings</h5>
+                          <button id="close-settings" type="button" class="btn-close"></button>
                         </div>
                         <div class="modal-body">
                           <div class="container-fluid">
                             <div class="row h-100">
-                                <div class="col-6 product-container">
-                                    <div class="select build-item" role="button" aria-label="house">
-                                        <img src="images/buildings/house.png" />
-                                    </div>
-                                    <div class="build-item" role="button" aria-label="work">
-                                        <img src="images/buildings/work.png" />
-                                    </div>
-                                    <div class="build-item" role="button" aria-label="intersection">
-                                        <img src="images/buildings/intersection.png" />
-                                    </div>
-                                </div>
-                                <div class="col-6 p-0">
-                                    <div class="vertical-divider"></div>
-                                    <table class="table table-striped-columns">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Image</th>
-                                                <th>Description</th>
-                                                <th>Cost</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td id="building-name">House</td>
-                                                <td><img id="building-image" src="images/buildings/house.png" /></td>
-                                                <td id="building-description">The building that is the home of exactly one citizen. Destroying this building will also murder the citizen.</td>
-                                                <td id="building-cost">$100</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <form id="buyForm">
-                                        <label for="buildBuyCount">
-                                            How many?
-                                        </label>
-                                        <input id="buildBuyCount" class="form-control" type="number" min="1" max="100" step="1" value="1">
-                                        <button type="submit" class="btn btn-primary">Buy</button>
-                                    </form>
-                                </div>
+                                <label for="background-volume" class="form-label">Background volume</label>
+                                <input type="range" class="form-range" id="background-volume">
                             </div>
                           </div>
                         </div>

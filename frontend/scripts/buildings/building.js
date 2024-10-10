@@ -10,6 +10,12 @@ export default class Building {
     static NOTHING = 3;
     static ROAD = 4;
 
+    // The building data
+    static intersectionData = {};
+    static houseData = {};
+    static workData = {};
+    static roadData = {};
+
     constructor(x, y, name, type) {
         // The position of the building
         this.x = x;
@@ -20,11 +26,6 @@ export default class Building {
 
         // The type of the building
         this.type = type;
-
-        // Building metadata
-        this.intersectionData = {};
-        this.houseData = {};
-        this.workData = {};
     }
 
     // Update the building
@@ -32,21 +33,28 @@ export default class Building {
         
     }
 
+    // Is a point inside of the building?
+    Contains(x, y) {
+        return x > this.x && y > this.y && x < this.x + BUILDING_SIZE && y < this.y + BUILDING_SIZE;
+    }
+
     // Load the neccessary metadata
     static Load() {
-        fetch("http://localhost:3000/get-building?all=true").then((function(result) {
-            result = Array.from(result.json());
-            this.intersectionData = result.find(a=>a.name == "Intersection");
-            this.houseData = result.find(a=>a.name == "House");
-            this.workData = result.find(a=>a.name == "Work");
+        fetch("http://localhost:3000/get-building?all=true").then((async function(result) {
+            result = await result.json();
+            this.intersectionData = result.find(a=>a.name == "Intersection") || {};
+            this.houseData = result.find(a=>a.name == "House") || {};
+            this.workData = result.find(a=>a.name == "Work") || {};
+            this.roadData = result.find(a=>a.name == "Road") || {};
         }).bind(this));
     }
 
-    // Draw a building at a certain location
+    // Draw a building at a certain location, also supports roads
     static DrawBuilding(x, y, type) {
         Graphics.DrawImage(
             type == this.HOUSE ? BuildingImages.HOUSE :
             type == this.WORKPLACE ? BuildingImages.WORKPLACE :
+            type == this.ROAD ? BuildingImages.ROAD :
             BuildingImages.INTERSECTION,
         x, y, {
             width: BUILDING_SIZE,

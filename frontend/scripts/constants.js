@@ -19,7 +19,7 @@ const MIN_LOAD = DEMO_GAME ? 1000 : 0;
 // The time it takes to fade
 const FADE_TIME = DEMO_GAME ? 1000 : 0;
 
-// The percent of money that you get back if you cancel a build
-const BUILD_CANCEL_REFUND = 0.9;
+// The size of a road helper
+const ROAD_HELPER_SIZE = 10;
 
-export { NUM_CATS, GAME_DELAY, BUILDING_SIZE, ROAD_WIDTH, MIN_LOAD, FADE_TIME, BUILD_CANCEL_REFUND };
+export { NUM_CATS, GAME_DELAY, BUILDING_SIZE, ROAD_WIDTH, MIN_LOAD, FADE_TIME, ROAD_HELPER_SIZE };
