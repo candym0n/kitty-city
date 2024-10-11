@@ -1,4 +1,5 @@
 import BuildingManager from "../buildings/buildingmanager.js";
+import SettingsModal from "../ui/modals/settingsmodal.js";
 import Graphics from "./graphics.js";
 
 export default class Camera {
@@ -57,6 +58,9 @@ export default class Camera {
     MouseDown(x, y) {
         // Make sure we aren't building
         if (BuildingManager.isBuilding || BuildingManager.buildingRoad) return;
+
+        // Make sure we aren't doing settings
+        if (SettingsModal.isShown) return;
 
         // Start drag
         this.#drag = true;

@@ -1,10 +1,11 @@
 import Button from "./button.js";
 import ImageLoader from "../media/images/imageloader.js";
 import Graphics from "../graphics/graphics.js";
-import BuildModal from "./modals/buildModal.js";
+import BuildModal from "./modals/buildmodal.js";
 import Game from "../scenes/game.js";
 import Building from "../buildings/building.js";
-import SettingsModal from "./modals/settingsModal.js";
+import SettingsModal from "./modals/settingsmodal.js";
+import BuildingManager from "../buildings/buildingmanager.js";
 
 export default class Dashboard {
     // Buttons
@@ -54,10 +55,26 @@ export default class Dashboard {
 
         // Setup the callbacks
         this.build.AddCallback(function() {
+            // Close everything else
+            SettingsModal.Display(false);
+
+            // Cancel all building
+            BuildingManager.building = Building.NOTHING;
+            BuildingManager.buildingRoad = false;
+
+            // Show the build modal
             BuildModal.modalShown = !BuildModal.modalShown;
         });
 
         this.settings.AddCallback(function() {
+            // Close everything else
+            BuildModal.modalShown = false;
+
+            // Cancel all building
+            BuildingManager.building = Building.NOTHING;
+            BuildingManager.buildingRoad = false;
+
+            // Display the settings modal
             SettingsModal.Display(true);
         });
         SettingsModal.Init();

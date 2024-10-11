@@ -1,11 +1,11 @@
 import { GAME_DELAY } from "../constants.js";
 import Graphics from "../graphics/graphics.js";
-import BackgroundImages from "../media/images/Backgroundimages.js";
+import BackgroundImages from "../media/images/backgroundimages.js";
 import EventHandler from "../ui/EventHandler.js";
 import Scene from "./scene.js";
 import Dashboard from "../ui/dashboard.js";
 import BuildingManager from "../buildings/buildingmanager.js";
-import BuildModal from "../ui/modals/buildModal.js";
+import BuildModal from "../ui/modals/buildmodal.js";
 
 export default class Game extends Scene {
     // The amount of time since the game has started
@@ -56,10 +56,10 @@ export default class Game extends Scene {
 
         // Draw EVERYTHING
         Graphics.DrawInfiniteBackground(BackgroundImages.GRASS);
+        BuildingManager.DrawCurrentRoad();
         BuildingManager.DrawBuildings();
         Dashboard.Draw();
         BuildingManager.DrawCurrentBuild();
-        BuildingManager.DrawCurrentRoad();
         
         // Do the fade in if we have to
         if (this.timeSinceStart < GAME_DELAY) {

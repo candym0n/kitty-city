@@ -1,3 +1,5 @@
+import SettingsModal from "../ui/modals/settingsmodal.js";
+
 export default class AudioManager {
     // A list of the background music
     static backgroundMusic = [
@@ -31,6 +33,14 @@ export default class AudioManager {
                 }
             });
         }
+
+        // Set some event listeners
+        SettingsModal.AddCallback(SettingsModal.values.backgroundVolume, (function(volume) {
+            console.log(volume)
+            this.backgroundMusic.forEach(function(music) {
+                music.volume = volume;
+            });
+        }).bind(this));
     }
 
     static PlayBackgroundMusic() {

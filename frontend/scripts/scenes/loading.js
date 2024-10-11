@@ -1,7 +1,7 @@
 import Scene from "./scene.js";
 import CatImages from "../media/images/catimages.js";
 import BuildingImages from "../media/images/buildingimages.js";
-import BackgroundImages from "../media/images/Backgroundimages.js";
+import BackgroundImages from "../media/images/backgroundimages.js";
 import ImageLoader from "../media/images/imageloader.js";
 import AudioManager from "../media/audio.js";
 import Graphics from "../graphics/graphics.js";
@@ -12,7 +12,7 @@ import { GAME_DELAY, MIN_LOAD, FADE_TIME } from "../constants.js";
 import Game from "./game.js";
 import Dashboard from "../ui/dashboard.js";
 import Building from "../buildings/building.js";
-import BuildModal from "../ui/modals/buildModal.js";
+import BuildModal from "../ui/modals/buildmodal.js";
 
 export default class LoadingScene extends Scene {
     // We need images, audio, and delay the loading for some time

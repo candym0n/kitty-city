@@ -4,6 +4,25 @@ export default class SettingsModal {
     static modal = new bootstrap.Modal(this.element, {});
     static closeButton = document.querySelector("#close-settings");
 
+    // A psudo-json for the settings
+    static values = {
+        backgroundVolume: document.querySelector("#background-volume"),
+        clickAndClick: document.querySelector("#click"),
+        dragAndDrag: document.querySelector("#drag")
+    }
+
+    // Is the modal shown?
+    static get isShown() {
+        return this.element.classList.contains("show");
+    }
+
+    // Add a callback for when one of the setting values changes
+    static AddCallback(element, callback, event="change") {
+        element.addEventListener(event, function() {
+            callback(element.value, element);
+        });
+    }
+
     // Setup some event listeners
     static Init() {
         // The close button

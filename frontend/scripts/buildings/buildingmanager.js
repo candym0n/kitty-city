@@ -6,6 +6,7 @@ import Graphics from "../graphics/graphics.js";
 import Game from "../scenes/game.js";
 import { BUILDING_SIZE, ROAD_HELPER_SIZE } from "../constants.js";
 import Road from "./road.js";
+import BuildModal from "../ui/modals/buildmodal.js";
 
 export default class BuildingManager {
     // The buildings that have been built
@@ -21,6 +22,9 @@ export default class BuildingManager {
 
     // The selected building for building a road
     static selectedBuilding = null;
+
+    // Have we done mouse up for click click?
+    static clickClickMouseUp = false;
 
     // Are you currently building something?
     static get isBuilding() {
@@ -64,8 +68,19 @@ export default class BuildingManager {
 
     // When the mouse is up
     static MouseUp(x, y) {
-        // Build a building if we are building
-        if (this.isBuilding) {
+        // Handle click click building
+        if (BuildModal.dragType === BuildModal.CLICK_CLICK) {
+            // Handle building for click click
+            if (this.isBuilding && this.clickClickMouseUp) {
+                this.Build(this.building, x - BUILDING_SIZE / 2, y - BUILDING_SIZE / 2, "HI");
+                this.clickClickMouseUp = false;
+            } else if (!this.clickClickMouseUp && this.isBuilding) {
+                this.clickClickMouseUp = true;
+            }
+        }
+
+        // Handle drag drop building
+        if (this.isBuilding && BuildModal.dragType === BuildModal.DRAG_DROP) {
             this.Build(this.building, x - BUILDING_SIZE / 2 + Graphics.camera.x, y - BUILDING_SIZE / 2 + Graphics.camera.y, "HI");
         }
 
@@ -74,6 +89,12 @@ export default class BuildingManager {
 
     // When the mouse is down
     static MouseDown(x, y) {
+        // Handle road stuff
+        this.#HandleRoadMouseDown(x, y);
+    }
+
+    // Handle the road's mouse down
+    static #HandleRoadMouseDown(x, y) {
         // Have we selected a building already?
         if (this.selectedBuilding !== null) return;
 

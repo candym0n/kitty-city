@@ -5,6 +5,7 @@ import Graphics from "../../graphics/graphics.js";
 import ImageLoader from "../../media/images/imageloader.js";
 import Game from "../../scenes/game.js";
 import EventHandler from "../EventHandler.js";
+import SettingsModal from "./settingsmodal.js";
 
 // The offset of every building
 const BUILDING_OFFSET = 50;
@@ -19,11 +20,20 @@ export default class BuildModal {
     // The description text
     static descriptionText = "Hover a building to see what it is!";
 
+    // The build type
+    static DRAG_DROP = 0;
+    static CLICK_CLICK = 1;
+    static dragType = this.DRAG_DROP;
+
     // Load what you gotta load
     static Load() {
         // Setup some event listeners
         EventHandler.AddCallback("mousedown", this.MouseDown.bind(this));
         EventHandler.AddCallback("mousemove", this.MouseMove.bind(this));
+
+        // Setup some settings
+        SettingsModal.AddCallback(SettingsModal.values.dragAndDrag, (()=>this.dragType = this.dragType === this.DRAG_DROP ? this.CLICK_CLICK : this.DRAG_DROP).bind(this));
+        SettingsModal.AddCallback(SettingsModal.values.clickAndClick, (()=>this.dragType = this.dragType === this.DRAG_DROP ? this.CLICK_CLICK : this.DRAG_DROP).bind(this));
     }
 
     // Draw the modal
@@ -50,7 +60,8 @@ export default class BuildModal {
 
     // Draw a building button
     static #DrawBuilding(type, position, cost) {
-        if (type == Building.ROAD && BuildingManager.buildingRoad) {
+        // Check if we are a selected road, or if we are a selected building
+        if (type == Building.ROAD && BuildingManager.buildingRoad || (this.dragType == this.CLICK_CLICK && BuildingManager.building == type)) {
             Graphics.DrawRect(10 + (BUILDING_SIZE + BUILDING_OFFSET) * position, Graphics.GetHeight() - 230, BUILDING_SIZE, BUILDING_SIZE, "green", {
                 opacity: 0.8
             });
@@ -62,7 +73,8 @@ export default class BuildModal {
             });
         }
 
-        if (BuildingManager.building !== type) {
+        // Only draw the building if we are click click OR we are not building this (and doing drag drop)
+        if (BuildingManager.building !== type || this.dragType == this.CLICK_CLICK) {
             Building.DrawBuilding(10 + (BUILDING_SIZE + BUILDING_OFFSET) * position, Graphics.GetHeight() - 230, type);
         }
 
@@ -104,6 +116,7 @@ export default class BuildModal {
         // Check if we want to do road
         if (this.#PointInside(3, x, y)) {
             BuildingManager.buildingRoad = !BuildingManager.buildingRoad;
+            BuildingManager.building = Building.NOTHING;
         }
     }
 

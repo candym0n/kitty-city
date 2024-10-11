@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
     <head>
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -57,9 +57,35 @@
                         </div>
                         <div class="modal-body">
                           <div class="container-fluid">
-                            <div class="row h-100">
-                                <label for="background-volume" class="form-label">Background volume</label>
-                                <input type="range" class="form-range" id="background-volume">
+                            <div class="row g-3 align-items-center justify-content-center">
+                                <div class="col-auto">
+                                    <h1>Audio</h1>
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center justify-content-center">
+                                <div class="col-auto">
+                                    <label for="background-volume" class="form-label">Background volume</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input min="0" max="1" step="0.01" value="1" type="range" class="form-range" id="background-volume">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center justify-content-center">
+                                <div class="col-auto">
+                                    <h1>Building</h1>
+                                </div>
+                            </div>
+                            <div class="row checkbox-row g-3 align-items-center justify-content-center">
+                                <div class="col-auto">
+                                    <div class="checkbox-inline form-check">
+                                        <input class="form-check-input" type="radio" name="build-type-radio" checked id="drag">
+                                        <label class="form-check-label" for="drag">Drag and drop</label>
+                                    </div>
+                                    <div class="checkbox-inline form-check">
+                                        <input class="form-check-input" type="radio" name="build-type-radio" id="click">
+                                        <label class="form-check-label" for="click">Click and click</label>
+                                    </div>
+                                </div>
                             </div>
                           </div>
                         </div>
