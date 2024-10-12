@@ -25,9 +25,8 @@ export default class Game extends Scene {
         EventHandler.AddCallback("keydown", Graphics.camera.KeyDown.bind(Graphics.camera));
         EventHandler.AddCallback("keyup", Graphics.camera.KeyUp.bind(Graphics.camera));
 
-        // Setup building events
-        EventHandler.AddCallback("mouseup", BuildingManager.MouseUp.bind(BuildingManager));
-        EventHandler.AddCallback("mousedown", BuildingManager.MouseDown.bind(BuildingManager));
+        // Setup the building manager
+        BuildingManager.Load();
 
         // Start the game!
         this.Init();
@@ -57,6 +56,7 @@ export default class Game extends Scene {
         // Draw EVERYTHING
         Graphics.DrawInfiniteBackground(BackgroundImages.GRASS);
         BuildingManager.DrawCurrentRoad();
+        BuildingManager.DrawRoads();
         BuildingManager.DrawBuildings();
         Dashboard.Draw();
         BuildingManager.DrawCurrentBuild();

@@ -1,4 +1,4 @@
-import { ROAD_WIDTH } from "../constants.js";
+import { BUILDING_SIZE, ROAD_WIDTH } from "../constants.js";
 import Graphics from "../graphics/graphics.js";
 
 // Remember, all a road is is a connection of two buildings
@@ -10,7 +10,7 @@ export default class Road {
     }
 
     Draw() {
-        Road.DrawRoad(this.one.x, this.one.y, this.two.x, this.two.y);
+        Road.DrawRoad(this.one.x + BUILDING_SIZE / 2, this.one.y + BUILDING_SIZE / 2, this.two.x + BUILDING_SIZE / 2, this.two.y + BUILDING_SIZE / 2);
     }
 
     // Draw a road

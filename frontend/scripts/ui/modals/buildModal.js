@@ -22,11 +22,11 @@ export default class BuildModal {
 
     // The build type
     static DRAG_DROP = 0;
-    static CLICK_CLICK = 1;
-    static dragType = this.DRAG_DROP;
+    static CLICKS = 1;
+    static buildType = this.DRAG_DROP;
 
     // Do we have... BOTH???
-    static dragTypeComboWombo = false;
+    static hybridBuild = false;
 
     // The index of the button that was clicked
     static clickedButton = -1;
@@ -38,16 +38,16 @@ export default class BuildModal {
         EventHandler.AddCallback("mousemove", this.MouseMove.bind(this));
 
         // Setup some settings
-        SettingsModal.AddCallback(SettingsModal.values.dragAndDrag, (() => {
-            this.dragType = this.DRAG_DROP;
-            this.dragTypeComboWombo = false;
+        SettingsModal.AddCallback(SettingsModal.values.buildDrag, (() => {
+            this.buildType = this.DRAG_DROP;
+            this.hybridBuild = false;
         }).bind(this));
-        SettingsModal.AddCallback(SettingsModal.values.clickAndClick, (() => {
-            this.dragType = this.CLICK_CLICK;
-            this.dragTypeComboWombo = false;
+        SettingsModal.AddCallback(SettingsModal.values.buildClick, (() => {
+            this.buildType = this.CLICKS;
+            this.hybridBuild = false;
         }).bind(this));
         SettingsModal.AddCallback(SettingsModal.values.buildBoth, (() => {
-            this.dragTypeComboWombo = true;
+            this.hybridBuild = true;
         }));
     }
 
@@ -76,7 +76,7 @@ export default class BuildModal {
     // Draw a building button
     static #DrawBuilding(type, position, cost) {
         // Check if we are a selected road, or if we are a selected building
-        if (type == Building.ROAD && BuildingManager.buildingRoad || (this.dragType == this.CLICK_CLICK && BuildingManager.building == type)) {
+        if (type == Building.ROAD && BuildingManager.buildingRoad || (this.buildType == this.CLICKS && BuildingManager.building == type)) {
             Graphics.DrawRect(10 + (BUILDING_SIZE + BUILDING_OFFSET) * position, Graphics.GetHeight() - 230, BUILDING_SIZE, BUILDING_SIZE, "green", {
                 opacity: 0.8
             });
@@ -89,7 +89,7 @@ export default class BuildModal {
         }
 
         // Only draw the building if we are click click OR we are not building this (and doing drag drop)
-        if (BuildingManager.building !== type || this.dragType == this.CLICK_CLICK) {
+        if (BuildingManager.building !== type || this.buildType == this.CLICKS) {
             Building.DrawBuilding(10 + (BUILDING_SIZE + BUILDING_OFFSET) * position, Graphics.GetHeight() - 230, type);
         }
 
@@ -116,18 +116,21 @@ export default class BuildModal {
         if (this.PointInside(0, x, y) && Game.money >= Building.houseData.cost) {
             BuildingManager.building = Building.HOUSE;
             BuildingManager.buildingRoad = false;
+            BuildingManager.selectedBuilding = null;
             this.clickedButton = 0;
         }
 
         if (this.PointInside(1, x, y) && Game.money >= Building.workData.cost) {
             BuildingManager.building = Building.WORKPLACE;
             BuildingManager.buildingRoad = false;
+            BuildingManager.selectedBuilding = null;
             this.clickedButton = 1;
         }
 
         if (this.PointInside(2, x, y) && Game.money >= Building.intersectionData.cost) {
             BuildingManager.building = Building.INTERSECTION;
             BuildingManager.buildingRoad = false;
+            BuildingManager.selectedBuilding = null;
             this.clickedButton = 2;
         }
 
@@ -135,6 +138,7 @@ export default class BuildModal {
         if (this.PointInside(3, x, y)) {
             BuildingManager.buildingRoad = !BuildingManager.buildingRoad;
             BuildingManager.building = Building.NOTHING;
+            BuildingManager.selectedBuilding = null;
             this.clickedButton = 3;
         }
     }

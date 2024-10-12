@@ -7,9 +7,14 @@ export default class SettingsModal {
     // A psudo-json for the settings
     static values = {
         backgroundVolume: document.querySelector("#background-volume"),
-        clickAndClick: document.querySelector("#click"),
-        dragAndDrag: document.querySelector("#drag"),
-        buildBoth: document.querySelector("#build-both")
+        buildClick: document.querySelector("#build-click"),
+        buildDrag: document.querySelector("#build-drag"),
+        buildBoth: document.querySelector("#build-both"),
+        roadClick: document.querySelector("#road-click"),
+        roadDrag: document.querySelector("#build-drag"),
+        roadBoth: document.querySelector("#build-both"),
+        redBoxes: document.querySelector("#show-red-boxes"),
+        maintainRoadBuild: document.querySelector("#maintain-build")
     }
 
     // Is the modal shown?

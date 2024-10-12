@@ -7,12 +7,17 @@ import Game from "../scenes/game.js";
 import { BUILDING_SIZE, ROAD_HELPER_SIZE } from "../constants.js";
 import Road from "./road.js";
 import BuildModal from "../ui/modals/buildModal.js";
+import EventHandler from "../ui/EventHandler.js";
+import SettingsModal from "../ui/modals/settingsmodal.js";
 
 export default class BuildingManager {
     // The buildings that have been built
     static houses = [];
     static intersections = [];
     static workplaces = [];
+
+    // The roads that have been built
+    static roads = [];
 
     // What are you currently building?
     static building = Building.NOTHING;
@@ -23,21 +28,43 @@ export default class BuildingManager {
     // The selected building for building a road
     static selectedBuilding = null;
 
-    // Have we done mouse up for click click?
-    static clickClickMouseUp = false;
+    // Have we done mouse up for building click click?
+    static buildClickMouseUp = false;
+
+    // The type of building (for roads)
+    // BuildModal.DRAG_DROP = 0
+    // TODO: Fix this later
+    static buildType = 0;
+    static hybridBuild = false;
+
+    // Have we done mouse up for road click click?
+    static roadClickMouseUp = false;
 
     // Are you currently building something?
     static get isBuilding() {
         return this.building !== Building.NOTHING;
     }
 
-    // Set the building road status
-    /**
-     * @param {boolean} a
-     */
-    static set buidlingRoad(a) {
-        this.selectedBuilding = null;
-        this.buildingRoad = a;
+    // Load what you gotta load
+    static Load() {
+        // Setup some events
+        EventHandler.AddCallback("mouseup", this.MouseUp.bind(this));
+        EventHandler.AddCallback("mousedown", this.MouseDown.bind(this));
+
+        // Add the settings
+        SettingsModal.AddCallback(SettingsModal.values.roadClick, (() => {
+            this.buildType = BuildModal.CLICKS;
+            this.hybridBuild = false;
+        }).bind(this));
+
+        SettingsModal.AddCallback(SettingsModal.values.roadDrag, (() => {
+            this.buildType = BuildModal.DRAG_DROP;
+            this.hybridBuild = false;
+        }).bind(this));
+
+        SettingsModal.AddCallback(SettingsModal.values.roadBoth, (() => {
+            this.hybridBuild = true;
+        }).bind(this));
     }
 
     // Build a building
@@ -69,28 +96,58 @@ export default class BuildingManager {
     // Handle building mouse up
     static #BuildMouseUp(x, y) {
         // Handle click click building
-        if (BuildModal.dragType === BuildModal.CLICK_CLICK) {
+        if (BuildModal.buildType === BuildModal.CLICKS) {
             // Handle building for click click
-            if (this.clickClickMouseUp) {
+            if (this.buildClickMouseUp) {
                 this.Build(this.building, x - BUILDING_SIZE / 2 + Graphics.camera.x, y - BUILDING_SIZE / 2 + Graphics.camera.y, "HI");
-                this.clickClickMouseUp = false;
-            } else if (!this.clickClickMouseUp) {
-                this.clickClickMouseUp = true;
+                this.buildClickMouseUp = false;
+            } else {
+                this.buildClickMouseUp = true;
             }
         }
 
         // Check if we are doing the COMBO WOMBO for building
-        if (BuildModal.dragTypeComboWombo) {
+        if (BuildModal.hybridBuild) {
             if (BuildModal.PointInside(BuildModal.clickedButton, x, y)) {
-                BuildModal.dragType = BuildModal.CLICK_CLICK;
+                BuildModal.buildType = BuildModal.CLICKS;
             } else {
-                BuildModal.dragType = BuildModal.DRAG_DROP;
+                BuildModal.buildType = BuildModal.DRAG_DROP;
             }
         }
 
         // Handle drag drop building
-        if (BuildModal.dragType === BuildModal.DRAG_DROP) {
+        if (BuildModal.buildType === BuildModal.DRAG_DROP) {
            this.Build(this.building, x - BUILDING_SIZE / 2 + Graphics.camera.x, y - BUILDING_SIZE / 2 + Graphics.camera.y, "HI");
+        }
+    }
+
+    // Handle mouse up for road stuff
+    static #RoadMouseUp(x, y) {
+        // Check if we have actually selected a building
+        if (this.selectedBuilding === null) return;
+
+        // Check if we are doing the COMBO WOMBO for roads
+        if (this.hybridBuild) {
+            if (this.selectedBuilding.Contains(x, y)) {
+                this.buildType = BuildModal.CLICKS;
+            } else {
+                this.buildType = BuildModal.DRAG_DROP;
+            }
+        }
+
+        // Handle click click road
+        if (this.buildType === BuildModal.CLICKS) {
+            if (this.roadClickMouseUp) {
+                this.AttemptBuildRoad(x, y);
+                this.roadClickMouseUp = false;
+            } else {
+                this.roadClickMouseUp = true;
+            }
+        }
+
+        // Build a road if we have selected another building
+        if (this.buildType === BuildModal.DRAG_DROP) {
+            this.AttemptBuildRoad(x, y);
         }
     }
 
@@ -101,29 +158,60 @@ export default class BuildingManager {
             this.#BuildMouseUp(x, y);
         }
 
-        // Build a road if we are building
+        // Handle road building stuff
+        if (this.buildingRoad) {
+            this.#RoadMouseUp(x, y);
+        }
+    }
+
+    // Handle the road's mouse down
+    static #RoadMouseDown(x, y) {
+        // Have we selected a building already?
+        if (this.selectedBuilding !== null) return;
+
+        // Check if we are selecting something
+        this.selectedBuilding = this.GetSelectedBuilding(x + Graphics.camera.x, y + Graphics.camera.y);
     }
 
     // When the mouse is down
     static MouseDown(x, y) {
         // Handle road stuff
-        this.#HandleRoadMouseDown(x, y);
+        if (this.buildingRoad) {
+            this.#RoadMouseDown(x, y);
+        }
     }
 
-    // Handle the road's mouse down
-    static #HandleRoadMouseDown(x, y) {
-        // Have we selected a building already?
-        if (this.selectedBuilding !== null) return;
+    // Attempt to build a road with mouse at (x, y)
+    static AttemptBuildRoad(x, y) {
+        let newSelected = this.GetSelectedBuilding(x + Graphics.camera.x, y + Graphics.camera.y);
 
-        // Check if we are selecting something
-        this.selectedBuilding = this.GetSelectedBuilding(x, y);
+        if (newSelected) {
+            // Build the road
+            const newRoad = new Road(this.selectedBuilding, newSelected);
+            this.roads.push(newRoad);
+
+            // You aren't building the road anymore
+            if (!SettingsModal.values.maintainRoadBuild.checked) {
+                this.buildingRoad = false;
+            }
+
+            this.selectedBuilding = null;
+        } else {
+            if (!SettingsModal.values.maintainRoadBuild.checked) {
+                this.buildingRoad = false;
+            }
+
+            this.selectedBuilding = null;
+        }
     }
 
     // Get a selected building
     static GetSelectedBuilding(x, y) {
         let result = null;
+
+        // Loop through EVERY SINGLE building and see if it contains the point
         this.houses.forEach(function(a) {
-            if (a.Contains(Graphics.mouseX, Graphics.mouseY)) {
+            if (a.Contains(x, y)) {
                 result = a;
                 return;
             }
@@ -131,7 +219,7 @@ export default class BuildingManager {
         
         this.workplaces.forEach(function(a) {
             if (result) return;
-            if (a.Contains(Graphics.mouseX, Graphics.mouseY)) {
+            if (a.Contains(x, y)) {
                 result = a;
                 return;
             }
@@ -139,7 +227,7 @@ export default class BuildingManager {
 
         this.intersections.forEach(function(a) {
             if (result) return;
-            if (a.Contains(Graphics.mouseX, Graphics.mouseY)) {
+            if (a.Contains(x, y)) {
                 result = a;
                 return;
             }
@@ -154,7 +242,7 @@ export default class BuildingManager {
         if (!this.isBuilding) return;
 
         // Check if it is click click
-        if (BuildModal.dragType === BuildModal.CLICK_CLICK) return;
+        if (BuildModal.buildType === BuildModal.CLICKS) return;
 
         // Draw the building
         Building.DrawBuilding(Graphics.mouseX - BUILDING_SIZE / 2, Graphics.mouseY - BUILDING_SIZE / 2, this.building);
@@ -175,7 +263,7 @@ export default class BuildingManager {
         what.Draw();
 
         // Draw a red dot if we are building roads
-        if (BuildingManager.buildingRoad) {
+        if (BuildingManager.buildingRoad && SettingsModal.values.redBoxes.checked) {
             Graphics.DrawRect(what.x + BUILDING_SIZE / 2 - ROAD_HELPER_SIZE, what.y + BUILDING_SIZE / 2, ROAD_HELPER_SIZE, ROAD_HELPER_SIZE, what.Contains(Graphics.mouseX, Graphics.mouseY) ? "blue" : "red");
         }
     }
@@ -185,5 +273,10 @@ export default class BuildingManager {
         this.houses.forEach(this.#DrawBuilding);
         this.workplaces.forEach(this.#DrawBuilding);
         this.intersections.forEach(this.#DrawBuilding);
+    }
+
+    // Draw all of the roads
+    static DrawRoads() {
+        this.roads.forEach(a=>a.Draw());
     }
 }

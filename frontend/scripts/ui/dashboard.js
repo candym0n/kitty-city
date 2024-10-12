@@ -61,6 +61,7 @@ export default class Dashboard {
             // Cancel all building
             BuildingManager.building = Building.NOTHING;
             BuildingManager.buildingRoad = false;
+            BuildingManager.selectedBuilding = null;
 
             // Show the build modal
             BuildModal.modalShown = !BuildModal.modalShown;
@@ -73,6 +74,7 @@ export default class Dashboard {
             // Cancel all building
             BuildingManager.building = Building.NOTHING;
             BuildingManager.buildingRoad = false;
+            BuildingManager.selectedBuilding = null;
 
             // Display the settings modal
             SettingsModal.Display(true);
