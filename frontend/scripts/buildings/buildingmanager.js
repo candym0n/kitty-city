@@ -6,7 +6,7 @@ import Graphics from "../graphics/graphics.js";
 import Game from "../scenes/game.js";
 import { BUILDING_SIZE, ROAD_HELPER_SIZE } from "../constants.js";
 import Road from "./road.js";
-import BuildModal from "../ui/modals/buildmodal.js";
+import BuildModal from "../ui/modals/buildModal.js";
 
 export default class BuildingManager {
     // The buildings that have been built
@@ -66,22 +66,39 @@ export default class BuildingManager {
         this.building = Building.NOTHING;
     }
 
-    // When the mouse is up
-    static MouseUp(x, y) {
+    // Handle building mouse up
+    static #BuildMouseUp(x, y) {
         // Handle click click building
         if (BuildModal.dragType === BuildModal.CLICK_CLICK) {
             // Handle building for click click
-            if (this.isBuilding && this.clickClickMouseUp) {
-                this.Build(this.building, x - BUILDING_SIZE / 2, y - BUILDING_SIZE / 2, "HI");
+            if (this.clickClickMouseUp) {
+                this.Build(this.building, x - BUILDING_SIZE / 2 + Graphics.camera.x, y - BUILDING_SIZE / 2 + Graphics.camera.y, "HI");
                 this.clickClickMouseUp = false;
-            } else if (!this.clickClickMouseUp && this.isBuilding) {
+            } else if (!this.clickClickMouseUp) {
                 this.clickClickMouseUp = true;
             }
         }
 
+        // Check if we are doing the COMBO WOMBO for building
+        if (BuildModal.dragTypeComboWombo) {
+            if (BuildModal.PointInside(BuildModal.clickedButton, x, y)) {
+                BuildModal.dragType = BuildModal.CLICK_CLICK;
+            } else {
+                BuildModal.dragType = BuildModal.DRAG_DROP;
+            }
+        }
+
         // Handle drag drop building
-        if (this.isBuilding && BuildModal.dragType === BuildModal.DRAG_DROP) {
-            this.Build(this.building, x - BUILDING_SIZE / 2 + Graphics.camera.x, y - BUILDING_SIZE / 2 + Graphics.camera.y, "HI");
+        if (BuildModal.dragType === BuildModal.DRAG_DROP) {
+           this.Build(this.building, x - BUILDING_SIZE / 2 + Graphics.camera.x, y - BUILDING_SIZE / 2 + Graphics.camera.y, "HI");
+        }
+    }
+
+    // When the mouse is up
+    static MouseUp(x, y) {
+        // Handle building stuff
+        if (this.isBuilding) {
+            this.#BuildMouseUp(x, y);
         }
 
         // Build a road if we are building
@@ -135,6 +152,9 @@ export default class BuildingManager {
     static DrawCurrentBuild() {
         // Check if we are building something
         if (!this.isBuilding) return;
+
+        // Check if it is click click
+        if (BuildModal.dragType === BuildModal.CLICK_CLICK) return;
 
         // Draw the building
         Building.DrawBuilding(Graphics.mouseX - BUILDING_SIZE / 2, Graphics.mouseY - BUILDING_SIZE / 2, this.building);

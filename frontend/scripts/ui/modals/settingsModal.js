@@ -8,7 +8,8 @@ export default class SettingsModal {
     static values = {
         backgroundVolume: document.querySelector("#background-volume"),
         clickAndClick: document.querySelector("#click"),
-        dragAndDrag: document.querySelector("#drag")
+        dragAndDrag: document.querySelector("#drag"),
+        buildBoth: document.querySelector("#build-both")
     }
 
     // Is the modal shown?

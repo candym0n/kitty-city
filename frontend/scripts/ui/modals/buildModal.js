@@ -25,6 +25,12 @@ export default class BuildModal {
     static CLICK_CLICK = 1;
     static dragType = this.DRAG_DROP;
 
+    // Do we have... BOTH???
+    static dragTypeComboWombo = false;
+
+    // The index of the button that was clicked
+    static clickedButton = -1;
+
     // Load what you gotta load
     static Load() {
         // Setup some event listeners
@@ -32,8 +38,17 @@ export default class BuildModal {
         EventHandler.AddCallback("mousemove", this.MouseMove.bind(this));
 
         // Setup some settings
-        SettingsModal.AddCallback(SettingsModal.values.dragAndDrag, (()=>this.dragType = this.dragType === this.DRAG_DROP ? this.CLICK_CLICK : this.DRAG_DROP).bind(this));
-        SettingsModal.AddCallback(SettingsModal.values.clickAndClick, (()=>this.dragType = this.dragType === this.DRAG_DROP ? this.CLICK_CLICK : this.DRAG_DROP).bind(this));
+        SettingsModal.AddCallback(SettingsModal.values.dragAndDrag, (() => {
+            this.dragType = this.DRAG_DROP;
+            this.dragTypeComboWombo = false;
+        }).bind(this));
+        SettingsModal.AddCallback(SettingsModal.values.clickAndClick, (() => {
+            this.dragType = this.CLICK_CLICK;
+            this.dragTypeComboWombo = false;
+        }).bind(this));
+        SettingsModal.AddCallback(SettingsModal.values.buildBoth, (() => {
+            this.dragTypeComboWombo = true;
+        }));
     }
 
     // Draw the modal
@@ -86,7 +101,7 @@ export default class BuildModal {
     }
 
     // Check if a point is in a building
-    static #PointInside(position, x, y) {
+    static PointInside(position, x, y) {
         // Get the points of the rectangle
         const x1 = 10 + (BUILDING_SIZE + BUILDING_OFFSET) * position;
         const y1 = Graphics.GetHeight() - 230;
@@ -98,37 +113,41 @@ export default class BuildModal {
 
     static MouseDown(x, y) {
         // Check if we want to build something
-        if (this.#PointInside(0, x, y) && Game.money >= Building.houseData.cost) {
+        if (this.PointInside(0, x, y) && Game.money >= Building.houseData.cost) {
             BuildingManager.building = Building.HOUSE;
             BuildingManager.buildingRoad = false;
+            this.clickedButton = 0;
         }
 
-        if (this.#PointInside(1, x, y) && Game.money >= Building.workData.cost) {
+        if (this.PointInside(1, x, y) && Game.money >= Building.workData.cost) {
             BuildingManager.building = Building.WORKPLACE;
             BuildingManager.buildingRoad = false;
+            this.clickedButton = 1;
         }
 
-        if (this.#PointInside(2, x, y) && Game.money >= Building.intersectionData.cost) {
+        if (this.PointInside(2, x, y) && Game.money >= Building.intersectionData.cost) {
             BuildingManager.building = Building.INTERSECTION;
             BuildingManager.buildingRoad = false;
+            this.clickedButton = 2;
         }
 
         // Check if we want to do road
-        if (this.#PointInside(3, x, y)) {
+        if (this.PointInside(3, x, y)) {
             BuildingManager.buildingRoad = !BuildingManager.buildingRoad;
             BuildingManager.building = Building.NOTHING;
+            this.clickedButton = 3;
         }
     }
 
     static MouseMove(x, y) {
         // Set the description
-        if (this.#PointInside(0, x, y)) {
+        if (this.PointInside(0, x, y)) {
             this.descriptionText = Building.houseData.description;
-        } else if (this.#PointInside(1, x, y)) {
+        } else if (this.PointInside(1, x, y)) {
             this.descriptionText = Building.workData.description;
-        } else if (this.#PointInside(2, x, y)) {
+        } else if (this.PointInside(2, x, y)) {
             this.descriptionText = Building.intersectionData.description;
-        } else if (this.#PointInside(3, x, y)) {
+        } else if (this.PointInside(3, x, y)) {
             this.descriptionText = Building.roadData.description;
         } else {
             this.descriptionText = "Hover a building to see what it is!";

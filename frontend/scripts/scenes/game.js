@@ -5,7 +5,7 @@ import EventHandler from "../ui/EventHandler.js";
 import Scene from "./scene.js";
 import Dashboard from "../ui/dashboard.js";
 import BuildingManager from "../buildings/buildingmanager.js";
-import BuildModal from "../ui/modals/buildmodal.js";
+import BuildModal from "../ui/modals/buildModal.js";
 
 export default class Game extends Scene {
     // The amount of time since the game has started

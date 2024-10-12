@@ -12,7 +12,7 @@ import { GAME_DELAY, MIN_LOAD, FADE_TIME } from "../constants.js";
 import Game from "./game.js";
 import Dashboard from "../ui/dashboard.js";
 import Building from "../buildings/building.js";
-import BuildModal from "../ui/modals/buildmodal.js";
+import BuildModal from "../ui/modals/buildModal.js";
 
 export default class LoadingScene extends Scene {
     // We need images, audio, and delay the loading for some time
