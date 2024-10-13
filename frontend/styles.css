@@ -1,27 +1,11 @@
-.vertical-divider {
-    height: 100%;
-    border-left: 1px solid #ccc;
-    position: absolute;
-    left: 50%;
-    top: 0;
+.sidebar {
+    background-color: #f8f9fa;
+    padding: 15px;
 }
-
-.build-item {
-    width: 50px !important;
-    height: 50px;
-    margin: 10px;
+.sidebar .nav-link {
+    color: #333;
 }
-
-.product-container {
-    display: flex;
-    align-items: left;
-}
-
-.select > img{
-    background-color: rgba(0, 255, 0, 0.5);
-    border: 2px solid black;
-}
-
-h3 {
-    text-align: center;
+.sidebar .nav-link.active {
+    background-color: #007bff;
+    color: white;
 }
