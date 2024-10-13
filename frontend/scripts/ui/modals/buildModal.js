@@ -23,10 +23,10 @@ export default class BuildModal {
     // The build type
     static DRAG_DROP = 0;
     static CLICKS = 1;
-    static buildType = this.DRAG_DROP;
+    static buildType;
 
     // Do we have... BOTH???
-    static hybridBuild = false;
+    static hybridBuild = true;
 
     // The index of the button that was clicked
     static clickedButton = -1;

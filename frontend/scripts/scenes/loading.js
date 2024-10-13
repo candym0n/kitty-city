@@ -30,6 +30,9 @@ export default class LoadingScene extends Scene {
     // Has everything loaded?
     static loaded = false;
 
+    // Have we reached the game load time?
+    static pastFade = false;
+
     static Load() {
         // Load everything
         CatImages.Load();
@@ -103,11 +106,17 @@ export default class LoadingScene extends Scene {
             Graphics.Clear("black", Math.min(this.timeAccumulator, GAME_DELAY) / GAME_DELAY);
         }
 
+        if (this.pastFade) {
+            Graphics.Clear("black", 1);
+        }
+
         // Check if we can start the game
         if (this.timeAccumulator >= GAME_DELAY) {
             setTimeout(function() {
                 Graphics.SwitchToScene(Game);
             }, FADE_TIME);
+            this.timeAccumulator = -Infinity;
+            this.pastFade = true;
         }
     }
 

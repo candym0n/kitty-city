@@ -32,10 +32,8 @@ export default class BuildingManager {
     static buildClickMouseUp = false;
 
     // The type of building (for roads)
-    // BuildModal.DRAG_DROP = 0
-    // TODO: Fix this later
-    static buildType = 0;
-    static hybridBuild = false;
+    static buildType;
+    static hybridBuild = true;
 
     // Have we done mouse up for road click click?
     static roadClickMouseUp = false;
@@ -148,6 +146,7 @@ export default class BuildingManager {
         // Build a road if we have selected another building
         if (this.buildType === BuildModal.DRAG_DROP) {
             this.AttemptBuildRoad(x, y);
+            this.roadClickMouseUp = false;
         }
     }
 
@@ -185,18 +184,36 @@ export default class BuildingManager {
     static AttemptBuildRoad(x, y) {
         let newSelected = this.GetSelectedBuilding(x + Graphics.camera.x, y + Graphics.camera.y);
 
+        let didNotBuildRoad = newSelected === null;
+
         if (newSelected) {
+            // Are we building a road to nowhere? (I swear that's a song)
+            if (this.selectedBuilding == newSelected) didNotBuildRoad = true;
+            
+            // Did we already build this road?
+            let cancelRoad = false;
+            this.roads.forEach(((road) => {
+                if (road.one == this.selectedBuilding && road.two == newSelected) cancelRoad = true;
+                if (road.one == newSelected && road.two == this.selectedBuilding) cancelRoad = true;
+            }).bind(this));
+
+            if (cancelRoad) didNotBuildRoad = true;
+
             // Build the road
-            const newRoad = new Road(this.selectedBuilding, newSelected);
-            this.roads.push(newRoad);
+            if (!didNotBuildRoad) {
+                const newRoad = new Road(this.selectedBuilding, newSelected);
+                this.roads.push(newRoad);
 
-            // You aren't building the road anymore
-            if (!SettingsModal.values.maintainRoadBuild.checked) {
-                this.buildingRoad = false;
+                // You aren't building the road anymore
+                if (!SettingsModal.values.maintainRoadBuild.checked) {
+                    this.buildingRoad = false;
+                }
+
+                this.selectedBuilding = null;
             }
+        }
 
-            this.selectedBuilding = null;
-        } else {
+        if (didNotBuildRoad) {
             if (!SettingsModal.values.maintainRoadBuild.checked) {
                 this.buildingRoad = false;
             }

@@ -1,11 +1,11 @@
 // Do you want to demo the game to someone?
-const DEMO_GAME = false;
+const DEMO_GAME = true;
 
 // How many distinct cat images are there?
 const NUM_CATS = 13;
 
 // The delay before the game starts
-const GAME_DELAY = DEMO_GAME ? 1000 : 0;
+const GAME_DELAY = DEMO_GAME ? 500 : 0;
 
 // The width and height of a building
 const BUILDING_SIZE = 50;
