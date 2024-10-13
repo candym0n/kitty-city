@@ -40,7 +40,7 @@ export default class AudioManager {
             this.backgroundMusic.forEach(function(music) {
                 music.volume = volume;
             });
-        }).bind(this), "input");
+        }).bind(this));
     }
 
     static PlayBackgroundMusic() {

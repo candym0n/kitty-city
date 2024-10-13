@@ -56,87 +56,73 @@
                           <button id="close-settings" type="button" class="btn-close"></button>
                         </div>
                         <div class="modal-body">
-                            <div class="row">
-                                <div class="col-3 sidebar">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#building">Building Construction</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#roads">Roads</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#audio">Audio</a>
-                                        </li>
-                                    </ul>
+                          <div class="container-fluid">
+                            <div class="row g-3 align-items-center justify-content-center">
+                                <div class="col-auto">
+                                    <h1>Audio</h1>
                                 </div>
-                                <div class="col-9">
-                                    <div class="tab-content">
-                                        <div class="tab-pane fade show active" id="building">
-                                            <h4>Building Build Type</h4>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="buildingBuildType" id="build-drag">
-                                                <label class="form-check-label" for="build-drag">
-                                                    Drag and drop
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="buildingBuildType" id="build-click">
-                                                <label class="form-check-label" for="build-click">
-                                                    Click
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="buildingBuildType" id="build-both" checked>
-                                                <label class="form-check-label" for="build-both">
-                                                    Both
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="roads">
-                                            <h4>Road Build Type</h4>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="roadsBuildType" id="road-drag">
-                                                <label class="form-check-label" for="road-drag">
-                                                    Drag and drop
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="roadsBuildType" id="road-click">
-                                                <label class="form-check-label" for="road-click">
-                                                    Click
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="roadsBuildType" id="road-both" checked>
-                                                <label class="form-check-label" for="road-both">
-                                                    Both
-                                                </label>
-                                            </div>
-                                            <h4 class="mt-4">Other</h4>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="show-red-boxes">
-                                                <label class="form-check-label" for="show-red-boxes">
-                                                    Show red box
-                                                </label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="maintain-build" checked>
-                                                <label class="form-check-label" for="maintain-build">
-                                                    Maintain road after building
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="audio">
-                                            <h4>Background Music</h4>
-                                            <div class="mb-3">
-                                                <label for="background-volume" class="form-label">Volume: <span id="background-volume-value">1.0</span></label>
-                                                <input type="range" class="form-range" min="0" max="1" step="0.01" id="background-volume" value="1.0">
-                                            </div>
-                                        </div>
+                            </div>
+                            <div class="row g-3 align-items-center justify-content-center">
+                                <div class="col-auto">
+                                    <label for="background-volume" class="form-label">Background volume</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input min="0" max="1" step="0.01" value="1" type="range" class="form-range" id="background-volume">
+                                </div>
+                            </div>
+                            <div class="row g-3 align-items-center justify-content-center">
+                                <div class="col-auto">
+                                    <h1>Building</h1>
+                                </div>
+                            </div>
+                            <div class="row checkbox-row g-3 align-items-center justify-content-center">
+                                <div class="col-auto">
+                                    <div class="checkbox-inline form-check">
+                                        <input class="form-check-input" type="radio" name="build-type-radio" checked id="build-drag">
+                                        <label class="form-check-label" for="drag">Drag and drop</label>
+                                    </div>
+                                    <div class="checkbox-inline form-check">
+                                        <input class="form-check-input" type="radio" name="build-type-radio" id="build-click">
+                                        <label class="form-check-label" for="click">Clicking</label>
+                                    </div>
+                                    <div class="checkbox-inline form-check">
+                                        <input class="form-check-input" type="radio" name="build-type-radio" id="build-both">
+                                        <label class="form-check-label" for="build-both">Both</label>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row g-3 align-items-center justify-content-center">
+                                <div class="col-auto">
+                                    <h1>Roads</h1>
+                                    <h3>Build type</h2>
+                                </div>
+                            </div>
+                            <div class="row checkbox-row g-3 align-items-center justify-content-center">
+                                <div class="col-auto">
+                                    <div class="checkbox-inline form-check">
+                                        <input class="form-check-input" type="radio" name="road-type-radio" checked id="road-drag">
+                                        <label class="form-check-label" for="drag">Drag and drop</label>
+                                    </div>
+                                    <div class="checkbox-inline form-check">
+                                        <input class="form-check-input" type="radio" name="road-type-radio" id="road-click">
+                                        <label class="form-check-label" for="click">Clicking</label>
+                                    </div>
+                                    <div class="checkbox-inline form-check">
+                                        <input class="form-check-input" type="radio" name="road-type-radio" id="road-both">
+                                        <label class="form-check-label" for="build-both">Both</label>
+                                    </div>
+                                    <h3>Other</h2>
+                                    <div class="checkbox-inline form-check">
+                                        <input class="form-check-input" type="checkbox" id="show-red-boxes">
+                                        <label class="form-check-label" for="show-red-boxes">Red boxes (when building)</label>
+                                    </div>
+                                    <div class="checkbox-inline form-check">
+                                        <input class="form-check-input" type="checkbox" id="maintain-build">
+                                        <label class="form-check-label" for="show-red-boxes">Maintain Road (after building)</label>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -168,27 +154,5 @@
 
         <!-- The main Kitty City script -->
         <script src="scripts/main.js" type="module"></script>
-
-        <!-- Don't judge me for having inline JavaScript. Judge someone with your own inline JavaScript -->
-        <script type="text/javascript">
-            document.addEventListener('DOMContentLoaded', function() {
-            var tabEls = document.querySelectorAll('a[data-bs-toggle="tab"]')
-            tabEls.forEach(function(tabEl) {
-                tabEl.addEventListener('shown.bs.tab', function (event) {
-                    tabEls.forEach(function(el) {
-                        el.classList.remove('active');
-                    });
-                    event.target.classList.add('active');
-                });
-            });
-
-            // Volume slider functionality
-            var volumeSlider = document.getElementById('background-volume');
-            var volumeValue = document.getElementById('background-volume-value');
-            volumeSlider.addEventListener('input', function() {
-                volumeValue.textContent = this.value;
-            });
-        });
-        </script>
     </body>
 </html>

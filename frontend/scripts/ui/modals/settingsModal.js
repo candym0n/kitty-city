@@ -11,8 +11,8 @@ export default class SettingsModal {
         buildDrag: document.querySelector("#build-drag"),
         buildBoth: document.querySelector("#build-both"),
         roadClick: document.querySelector("#road-click"),
-        roadDrag: document.querySelector("#road-drag"),
-        roadBoth: document.querySelector("#road-both"),
+        roadDrag: document.querySelector("#build-drag"),
+        roadBoth: document.querySelector("#build-both"),
         redBoxes: document.querySelector("#show-red-boxes"),
         maintainRoadBuild: document.querySelector("#maintain-build")
     }
