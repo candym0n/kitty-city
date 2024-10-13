@@ -1,12 +1,20 @@
 import { BUILDING_SIZE, ROAD_WIDTH } from "../constants.js";
 import Graphics from "../graphics/graphics.js";
+import BuildingManager from "./buildingmanager.js";
 
 // Remember, all a road is is a connection of two buildings
 export default class Road {
     // Order should not and does not matter
     constructor(one, two) {
+        // The buildings that the road connects
         this.one = one;
         this.two = two;
+
+        // The length of the road
+        this.length = Math.hypot(this.one.x - this.two.x, this.one.y - this.two.y);
+
+        // An ID for the road to identify it even when it has passed away
+        this.id = Math.random();
     }
 
     Draw() {
@@ -22,5 +30,29 @@ export default class Road {
         Graphics.DrawLine(x1, y1, x2, y2, ROAD_WIDTH / 4, "white", {
             lineDash: [3, 5]
         });
+    }
+
+    // Find ALL roads that connect to a building
+    static FindRoads(building) {
+        let result = [];
+
+        // Which roads are reversed (two points to the building instead of one)
+        let reversed = [];
+
+        BuildingManager.roads.forEach(a=>{
+            if (a.one === building) {
+                result.push(a);
+                reversed.push(false);
+            }
+
+            if (a.two === building) {
+                result.push(a);
+                reversed.push(true);
+            }
+        });
+
+        return {
+
+        };
     }
 }

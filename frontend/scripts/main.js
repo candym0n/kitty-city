@@ -3,9 +3,11 @@ import EventHandler from "./ui/EventHandler.js";
 
 // Check if we are allowed to get rid of the GOD DAMN FOOTER
 let removeFooter = false;
-if (new URLSearchParams(location.search).get("hideFooter")) {
+if (new URLSearchParams(location.search).has("hideFooter")) {
     removeFooter = true;
     document.querySelector("footer").remove();
+} else if (confirm("Do you want to hide that god damn footer?")) {
+    location.replace("?hideFooter=true");
 }
 
 // Init the graphics

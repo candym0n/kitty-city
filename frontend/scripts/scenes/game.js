@@ -6,6 +6,7 @@ import Scene from "./scene.js";
 import Dashboard from "../ui/dashboard.js";
 import BuildingManager from "../buildings/buildingmanager.js";
 import BuildModal from "../ui/modals/buildModal.js";
+import Cat from "../cats/cat.js";
 
 export default class Game extends Scene {
     // The amount of time since the game has started
@@ -40,6 +41,9 @@ export default class Game extends Scene {
         // Update the time since the start of the game
         this.timeSinceStart += dt;
 
+        // Update the cats
+        Cat.Update(dt);
+
         // Draw the scene
         this.Draw();
 
@@ -58,6 +62,7 @@ export default class Game extends Scene {
         BuildingManager.DrawCurrentRoad();
         BuildingManager.DrawRoads();
         BuildingManager.DrawBuildings();
+        Cat.DrawCats();
         Dashboard.Draw();
         BuildingManager.DrawCurrentBuild();
         

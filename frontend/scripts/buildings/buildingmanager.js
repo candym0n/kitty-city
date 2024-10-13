@@ -9,6 +9,7 @@ import Road from "./road.js";
 import BuildModal from "../ui/modals/buildModal.js";
 import EventHandler from "../ui/EventHandler.js";
 import SettingsModal from "../ui/modals/settingsmodal.js";
+import Cat from "../cats/cat.js";
 
 export default class BuildingManager {
     // The buildings that have been built
@@ -74,6 +75,9 @@ export default class BuildingManager {
                 built = new House(x, y, name);
                 this.houses.push(built);
                 Game.money -= Building.houseData.cost;
+
+                // Create a new cat
+                Cat.AddCat(built);
                 break;
             case Building.WORKPLACE:
                 built = new Workplace(x, y, name);
@@ -126,7 +130,6 @@ export default class BuildingManager {
 
         // Check if we are doing the COMBO WOMBO for roads
         if (this.hybridBuild) {
-            console.log(this.selectedBuilding.Contains(x + Graphics.camera.x, y + Graphics.camera.y))
             if (this.selectedBuilding.Contains(x + Graphics.camera.x, y + Graphics.camera.y)) {
                 this.buildType = BuildModal.CLICKS;
             } else {
@@ -282,7 +285,7 @@ export default class BuildingManager {
 
         // Draw a red dot if we are building roads
         if (BuildingManager.buildingRoad && SettingsModal.values.redBoxes.checked) {
-            Graphics.DrawRect(what.x + BUILDING_SIZE / 2 - ROAD_HELPER_SIZE, what.y + BUILDING_SIZE / 2, ROAD_HELPER_SIZE, ROAD_HELPER_SIZE, what.Contains(Graphics.mouseX, Graphics.mouseY) ? "blue" : "red");
+            Graphics.DrawRect(what.x + BUILDING_SIZE / 2 - ROAD_HELPER_SIZE, what.y + BUILDING_SIZE / 2, ROAD_HELPER_SIZE, ROAD_HELPER_SIZE, what.Contains(Graphics.mouseX, Graphics.mouseY) ? "blue" : what == BuildingManager.selectedBuilding ? "green" : "red");
         }
     }
 

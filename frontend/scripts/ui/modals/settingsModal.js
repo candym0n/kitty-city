@@ -14,7 +14,8 @@ export default class SettingsModal {
         roadDrag: document.querySelector("#road-drag"),
         roadBoth: document.querySelector("#road-both"),
         redBoxes: document.querySelector("#show-red-boxes"),
-        maintainRoadBuild: document.querySelector("#maintain-build")
+        maintainRoadBuild: document.querySelector("#maintain-build"),
+        buildDescription: document.querySelector("#build-description")
     }
 
     // Is the modal shown?

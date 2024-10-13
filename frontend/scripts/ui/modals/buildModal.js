@@ -68,9 +68,11 @@ export default class BuildModal {
         this.#DrawBuilding(Building.ROAD, 3, -1);
 
         // Draw the description
-        Graphics.DrawText(this.descriptionText, Graphics.canvas.width - Graphics.c.measureText(this.descriptionText).width - 50, Graphics.canvas.height - 130, {
-            fontSize: 32
-        });
+        if (SettingsModal.values.buildDescription.checked) {
+            Graphics.DrawText(this.descriptionText, Graphics.canvas.width - Graphics.c.measureText(this.descriptionText).width - 50, Graphics.canvas.height - 130, {
+                fontSize: 32
+            });
+        }
     }
 
     // Draw a building button
