@@ -5,6 +5,7 @@ import Graphics from "../graphics/graphics.js";
 import CatImages from "../media/images/catimages.js";
 import CatStatus from "./catstatus.js";
 import Maths from "../maths.js";
+import Game from "../scenes/game.js";
 
 // Kitizen, Kitty, Feline friend - take your pick
 export default class Cat {
@@ -34,7 +35,7 @@ export default class Cat {
             case CatStatus.REST:
                 // Are we done sleeping?
                 if (this.status.accumulator >= this.status.sleepTime) {
-                    this.walkingGoal = CatStatus.WORK;
+                    this.status.walkingGoal = CatStatus.WORK;
                     this.status.state = CatStatus.WAIT;
                     this.AttemptWalking();
                 }
@@ -42,8 +43,9 @@ export default class Cat {
             case CatStatus.WORK:
                 // Are we done working?
                 if (this.status.accumulator >= this.status.workTime) {
+                    Game.money += 10;
                     this.status.walkingGoal = CatStatus.REST;
-                    this.SwitchToWaiting();
+                    this.state = CatStatus.WAIT;
                     this.AttemptWalking();
                 }
                 break;
@@ -57,7 +59,7 @@ export default class Cat {
 
                 // Are we done walking?
                 if (this.status.walked >= 1) {
-                    this.location = this.destination;
+                    this.status.location = this.status.backwards ? this.status.walkingRoad.one : this.status.walkingRoad.two;
                     this.SwitchToNextTask();
                 }
                 break;
@@ -75,6 +77,9 @@ export default class Cat {
             this.status.state = CatStatus.WAIT;
             this.AttemptWalking();
         }
+
+        // Reset the accumulator
+        this.status.accumulator = 0;
     }
 
     // Try to switch to walking
@@ -85,25 +90,30 @@ export default class Cat {
                       Building.INTERSECTION;
 
         // Try to find a road
-        const road = this.FindRoad(this.status.location, where);
+        const road = this.FindRoad(this.status.location);
 
         // Do we have a road?
-        if (!road) return;
+        if (!road[0]) return;
 
         // We can FINALLY switch to walking!
         this.status.state = CatStatus.WALK;
         this.status.walked = 0;
-        this.status.walkingRoad = road;
+        this.status.walkingRoad = road[0];
+        this.status.backwards = road[1];
     }
 
     // Find a road to get you from point A to point B
     // If to is Building.HOUSE we mean go to this.resides
     FindRoad(to) {
         // The roads we can use
-        const roads = Road.FindRoads(this.status.location);
+        const [roads, reversed] = Road.FindRoads(this.status.location);
 
         // For now, just return a random road
-        return roads[Math.floor(Math.random() * roads.length)];
+        let index = Math.floor(Math.random() * roads.length);
+        let road = roads[index];
+        let back = reversed[index];
+
+        return [road, back];
     }
 
     // Add a cat
@@ -140,8 +150,8 @@ export default class Cat {
                 catY = cat.status.location.y;
                 break;
             case CatStatus.WALK:
-                catX = Maths.Lerp(cat.status.walkingRoad.one.x, cat.status.walkingRoad.two.x, cat.status.walked);
-                catY = Maths.Lerp(cat.status.walkingRoad.one.y, cat.status.walkingRoad.two.y, cat.status.walked);
+                catX = Maths.Lerp(cat.status.walkingRoad.one.x, cat.status.walkingRoad.two.x, cat.status.backwards ? 1 - cat.status.walked : cat.status.walked);
+                catY = Maths.Lerp(cat.status.walkingRoad.one.y, cat.status.walkingRoad.two.y, cat.status.backwards ? 1 - cat.status.walked : cat.status.walked);
                 break;
         }
 

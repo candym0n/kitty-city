@@ -91,8 +91,10 @@ export default class BuildingManager {
                 break;
         }
 
-        // Sorry, you're not building anymore
-        this.building = Building.NOTHING;
+        // Sorry, you're not building anymore, except if...
+        if (!(SettingsModal.values.maintainBuild && BuildModal.buildType === BuildModal.CLICKS)) {
+            this.building = Building.NOTHING;
+        }
     }
 
     // Handle building mouse up
@@ -102,7 +104,9 @@ export default class BuildingManager {
             // Handle building for click click
             if (this.buildClickMouseUp) {
                 this.Build(this.building, x - BUILDING_SIZE / 2 + Graphics.camera.x, y - BUILDING_SIZE / 2 + Graphics.camera.y, "HI");
-                this.buildClickMouseUp = false;
+                if (!SettingsModal.values.maintainBuild) {
+                    this.buildClickMouseUp = false;
+                }
             } else {
                 this.buildClickMouseUp = true;
             }
@@ -141,7 +145,13 @@ export default class BuildingManager {
         if (this.buildType === BuildModal.CLICKS) {
             if (this.roadClickMouseUp) {
                 this.AttemptBuildRoad(x, y);
-                this.roadClickMouseUp = false;
+
+                if (SettingsModal.values.maintainBuild) {
+                    this.roadClickMouseUp = true;
+                } else {
+                    this.roadClickMouseUp = false;
+                }
+                
             } else {
                 this.roadClickMouseUp = true;
             }

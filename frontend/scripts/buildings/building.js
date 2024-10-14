@@ -26,6 +26,9 @@ export default class Building {
 
         // The type of the building
         this.type = type;
+
+        // A random ID for path finding
+        this.id = Math.random();
     }
 
     // Update the building

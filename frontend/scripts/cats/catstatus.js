@@ -25,6 +25,7 @@ export default class CatStatus {
     walkingGoal;
 
     // Are you walking backwards? (two -> one instead of one -> two)
+    backwards = false;
 
     constructor(home) {
         // The state of the cat
@@ -35,7 +36,7 @@ export default class CatStatus {
         this.workTime = Math.random() * 1000 + 1000;
 
         // The speed of the cat (in pixels / frame)
-        this.speed = Math.random() * 10 + 10;
+        this.speed = Math.random()*2  + 1;
 
         // Where the cat is currently
         this.location = home;

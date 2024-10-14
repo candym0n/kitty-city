@@ -35,8 +35,8 @@ export default class Road {
     // Find ALL roads that connect to a building
     static FindRoads(building) {
         let result = [];
-
-        // Which roads are reversed (two points to the building instead of one)
+        
+        // The ones that are reversed
         let reversed = [];
 
         BuildingManager.roads.forEach(a=>{
@@ -51,8 +51,6 @@ export default class Road {
             }
         });
 
-        return {
-
-        };
+        return [result, reversed];
     }
 }
