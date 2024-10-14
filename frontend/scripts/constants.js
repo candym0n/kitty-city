@@ -1,5 +1,5 @@
 // Do you want to demo the game to someone?
-const DEMO_GAME = false;
+const DEMO_GAME = true;
 
 // How many distinct cat images are there?
 const NUM_CATS = 13;
@@ -25,4 +25,10 @@ const FADE_TIME = DEMO_GAME ? 1000 : 0;
 // The size of a road helper
 const ROAD_HELPER_SIZE = 10;
 
-export { NUM_CATS, GAME_DELAY, BUILDING_SIZE, ROAD_WIDTH, MIN_LOAD, FADE_TIME, ROAD_HELPER_SIZE, CAT_SIZE };
+// The default profit of a workplace
+const DEFAULT_PROFIT = DEMO_GAME ? 10 : 1000;
+
+// The default speed of a cat
+const CAT_SPEED = DEMO_GAME ? 1 : 10;
+
+export { NUM_CATS, GAME_DELAY, BUILDING_SIZE, ROAD_WIDTH, MIN_LOAD, FADE_TIME, ROAD_HELPER_SIZE, CAT_SIZE, DEFAULT_PROFIT, CAT_SPEED };

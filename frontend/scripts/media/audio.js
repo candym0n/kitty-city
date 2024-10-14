@@ -36,7 +36,6 @@ export default class AudioManager {
 
         // Set some event listeners
         SettingsModal.AddCallback(SettingsModal.values.backgroundVolume, (function(volume) {
-            console.log(volume)
             this.backgroundMusic.forEach(function(music) {
                 music.volume = volume;
             });

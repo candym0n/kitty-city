@@ -27,6 +27,12 @@ export default class Building {
         // The type of the building
         this.type = type;
 
+        // The roads that the building touches
+        this.roads = [];
+
+        // Which roads are backwards?
+        this.backwards = [];
+
         // A random ID for path finding
         this.id = Math.random();
     }

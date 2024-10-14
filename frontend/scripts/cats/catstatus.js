@@ -1,3 +1,5 @@
+import { CAT_SPEED } from "../constants.js";
+
 // The status of a cat
 export default class CatStatus {
     // You are sleeping in your house
@@ -36,7 +38,7 @@ export default class CatStatus {
         this.workTime = Math.random() * 1000 + 1000;
 
         // The speed of the cat (in pixels / frame)
-        this.speed = Math.random()*2  + 1;
+        this.speed = Math.random() * CAT_SPEED * 2  + CAT_SPEED;
 
         // Where the cat is currently
         this.location = home;

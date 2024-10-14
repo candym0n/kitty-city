@@ -1,6 +1,7 @@
 import { BUILDING_SIZE, ROAD_WIDTH } from "../constants.js";
 import Graphics from "../graphics/graphics.js";
 import BuildingManager from "./buildingmanager.js";
+import RoadProfit from "./roadprofit.js";
 
 // Remember, all a road is is a connection of two buildings
 export default class Road {
@@ -35,22 +36,13 @@ export default class Road {
     // Find ALL roads that connect to a building
     static FindRoads(building) {
         let result = [];
-        
-        // The ones that are reversed
-        let reversed = [];
 
         BuildingManager.roads.forEach(a=>{
-            if (a.one === building) {
+            if (a.one === building || a.two === building) {
                 result.push(a);
-                reversed.push(false);
-            }
-
-            if (a.two === building) {
-                result.push(a);
-                reversed.push(true);
             }
         });
 
-        return [result, reversed];
+        return result;
     }
 }

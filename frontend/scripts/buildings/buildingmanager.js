@@ -10,6 +10,7 @@ import BuildModal from "../ui/modals/buildModal.js";
 import EventHandler from "../ui/EventHandler.js";
 import SettingsModal from "../ui/modals/settingsmodal.js";
 import Cat from "../cats/cat.js";
+import RoadProfit from "./roadprofit.js";
 
 export default class BuildingManager {
     // The buildings that have been built
@@ -64,6 +65,7 @@ export default class BuildingManager {
         SettingsModal.AddCallback(SettingsModal.values.roadBoth, (() => {
             this.hybridBuild = true;
         }).bind(this));
+
     }
 
     // Build a building
@@ -217,6 +219,12 @@ export default class BuildingManager {
             if (!didNotBuildRoad) {
                 const newRoad = new Road(this.selectedBuilding, newSelected);
                 this.roads.push(newRoad);
+
+                // Alert the buildings for a new road
+                this.selectedBuilding.roads.push(newRoad);
+                this.selectedBuilding.backwards.push(false);
+                newSelected.roads.push(newRoad);
+                newSelected.backwards.push(true);
 
                 // You aren't building the road anymore
                 if (!SettingsModal.values.maintainRoadBuild.checked) {

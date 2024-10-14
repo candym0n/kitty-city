@@ -6,6 +6,7 @@ import CatImages from "../media/images/catimages.js";
 import CatStatus from "./catstatus.js";
 import Maths from "../maths.js";
 import Game from "../scenes/game.js";
+import RoadProfit from "../buildings/roadprofit.js";
 
 // Kitizen, Kitty, Feline friend - take your pick
 export default class Cat {
@@ -43,7 +44,7 @@ export default class Cat {
             case CatStatus.WORK:
                 // Are we done working?
                 if (this.status.accumulator >= this.status.workTime) {
-                    Game.money += 10;
+                    Game.money += this.status.location.profit;
                     this.status.walkingGoal = CatStatus.REST;
                     this.state = CatStatus.WAIT;
                     this.AttemptWalking();
@@ -102,18 +103,22 @@ export default class Cat {
         this.status.backwards = road[1];
     }
 
-    // Find a road to get you from point A to point B
-    // If to is Building.HOUSE we mean go to this.resides
-    FindRoad(to) {
+    // Find a road to get to fufill your goal
+    FindRoad() {
         // The roads we can use
-        const [roads, reversed] = Road.FindRoads(this.status.location);
+        const roads = Road.FindRoads(this.status.location);
 
-        // For now, just return a random road
-        let index = Math.floor(Math.random() * roads.length);
-        let road = roads[index];
-        let back = reversed[index];
+        // Check if we have any roads
+        if (roads.length === 0) return [];
 
-        return [road, back];
+        // Select the road with the most profitability
+        const profatibility = this.status.location.roads.map((road => [RoadProfit.FindProfit(road, this), road]).bind(this));
+        const best = profatibility.reduce((lowest, current) => (current[0] > lowest[0] ? current : lowest))[1];
+
+        // Calculuate the direction that the cat is walking on the road
+        const back = this.status.location == best.two;
+
+        return [best, back];
     }
 
     // Add a cat
