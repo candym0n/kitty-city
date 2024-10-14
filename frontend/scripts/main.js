@@ -12,7 +12,7 @@ if (new URLSearchParams(location.search).has("hideFooter")) {
 
 // Init the graphics
 Graphics.Init(removeFooter);
-Graphics.camera.SetBoundaries(-10000, 10000, -10000, 10000);
+Graphics.camera.SetBoundaries(-1000, 1000, -1000, 1000);
 
 // Init the event handler
 EventHandler.Init();

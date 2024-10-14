@@ -1,10 +1,17 @@
 import SettingsModal from "../ui/modals/settingsmodal.js";
+import CatImages from "./images/catimages.js";
 
 export default class AudioManager {
     // A list of the background music
     static backgroundMusic = [
-        new Audio("../../audio/background/hepcats.mp3"),
+        new Audio("audio/background/hepcats.mp3"),
     ];
+
+    // A list of special cat tunes
+    static catTunes = {
+        santa: new Audio("audio/special/meow-ride.mp3"),
+        nyan: new Audio("audio/special/nyan.mp3")
+    }
 
     // Which background music is currently playing?
     static backgroundMusicIndex = 0;
@@ -18,6 +25,24 @@ export default class AudioManager {
     // Add a callback function
     static AddCallback(func) {
         this.callbackFunctions.push(func);
+    }
+
+    // Play a sound effect
+    static Play(effect) {
+        effect.currentTime = 0;
+        effect.play();
+    }
+
+    // Play a special tune for the cats
+    static PlayCatTune(index) {
+        switch (index) {
+            case CatImages.SANTA_CAT:
+                this.Play(this.catTunes.santa);
+                break;
+            case CatImages.NYAN_CAT:
+                this.Play(this.catTunes.nyan);
+                break;
+        }
     }
 
     // Load the audio

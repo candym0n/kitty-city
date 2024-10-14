@@ -57,12 +57,10 @@ export default class RoadProfit {
 
             return profitability;
         }
-
-        // Calculate the profatibility
     }
 
     // Find all of the buildings that a building leads to via recursion
-    static FindBuildings(building, roads=[building.roads], accumulatedLength=0, alreadyFoundRoad=[]) {
+    static FindBuildings(building, roads=building.roads, accumulatedLength=0, alreadyFoundRoad=[]) {
         let result = [];
 
         // Repeat for every building connected via roads
