@@ -7,6 +7,7 @@ import CatStatus from "./catstatus.js";
 import Maths from "../maths.js";
 import Game from "../scenes/game.js";
 import RoadProfit from "../buildings/roadprofit.js";
+import AudioManager from "../media/audio.js";
 
 // Kitizen, Kitty, Feline friend - take your pick
 export default class Cat {
@@ -25,6 +26,10 @@ export default class Cat {
 
         // The status of the cat
         this.status = new CatStatus(resides);
+
+        // The sound effects of the cat
+        this.snoringNoises = new Audio("audio/cat/snore.mp3");
+        this.moneyNoises = new Audio("audio/cat/money.mp3");
     }
 
     // Update a cat
@@ -60,6 +65,7 @@ export default class Cat {
 
                 // Are we done walking?
                 if (this.status.walked >= 1) {
+                    this.status.prevLocation = this.status.location;
                     this.status.location = this.status.backwards ? this.status.walkingRoad.one : this.status.walkingRoad.two;
                     this.SwitchToNextTask();
                 }
@@ -72,8 +78,10 @@ export default class Cat {
         // Check if you are ready to fufill your goal
         if (this.status.location.type === Building.WORKPLACE && this.status.walkingGoal === CatStatus.WORK) {
             this.status.state = CatStatus.WORK;
+            AudioManager.Play(this.moneyNoises);
         } else if (this.status.location === this.resides && this.status.walkingGoal === CatStatus.REST) {
             this.status.state = CatStatus.REST;
+            AudioManager.Play(this.snoringNoises);
         } else {
             this.status.state = CatStatus.WAIT;
             this.AttemptWalking();
@@ -105,14 +113,19 @@ export default class Cat {
 
     // Find a road to get to fufill your goal
     FindRoad() {
-        // The roads we can use
-        const roads = Road.FindRoads(this.status.location);
+        // The roads we can use (discard previous location)
+        let roads = this.status.location.roads.filter((a=>a.one !== this.status.prevLocation && a.two !== this.status.prevLocation).bind(this));
+
+        // Check if the previous location is all we have
+        if (roads.length === 0 && this.status.prevLocation) {
+            roads = this.status.location.roads;
+        }
 
         // Check if we have any roads
         if (roads.length === 0) return [];
 
         // Select the road with the most profitability
-        const profatibility = this.status.location.roads.map((road => [RoadProfit.FindProfit(road, this), road]).bind(this));
+        const profatibility = roads.map((road => [RoadProfit.FindProfit(road, this), road]).bind(this));
         const best = profatibility.reduce((lowest, current) => (current[0] > lowest[0] ? current : lowest))[1];
 
         // Calculuate the direction that the cat is walking on the road
@@ -124,7 +137,11 @@ export default class Cat {
     // Add a cat
     static AddCat(house) {
         // Generate a random image
-        const image = CatImages.images[Math.floor(CatImages.COUNT * Math.random())];
+        const imageIndex = Math.floor(CatImages.COUNT * Math.random());
+        const image = CatImages.images[imageIndex];
+
+        // Play a special tune if there is a special cat
+        AudioManager.PlayCatTune(imageIndex);
 
         // Create the cat
         const cat = new Cat(house, image);

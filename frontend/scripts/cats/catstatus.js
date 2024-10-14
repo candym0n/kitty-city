@@ -29,6 +29,9 @@ export default class CatStatus {
     // Are you walking backwards? (two -> one instead of one -> two)
     backwards = false;
 
+    // Your previous location (so that you don't repeat yourself)
+    prevLocation = null;
+
     constructor(home) {
         // The state of the cat
         this.state = CatStatus.REST;

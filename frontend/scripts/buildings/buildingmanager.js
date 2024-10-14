@@ -11,6 +11,7 @@ import EventHandler from "../ui/EventHandler.js";
 import SettingsModal from "../ui/modals/settingsmodal.js";
 import Cat from "../cats/cat.js";
 import RoadProfit from "./roadprofit.js";
+import AudioManager from "../media/audio.js";
 
 export default class BuildingManager {
     // The buildings that have been built
@@ -40,6 +41,9 @@ export default class BuildingManager {
     // Have we done mouse up for road click click?
     static roadClickMouseUp = false;
 
+    // The place building sound effect
+    static placeBuildingNoise = new Audio("audio/building/place.mp3");
+
     // Are you currently building something?
     static get isBuilding() {
         return this.building !== Building.NOTHING;
@@ -65,11 +69,13 @@ export default class BuildingManager {
         SettingsModal.AddCallback(SettingsModal.values.roadBoth, (() => {
             this.hybridBuild = true;
         }).bind(this));
-
     }
 
     // Build a building
-    static Build(building, x, y, name) {        
+    static Build(building, x, y, name) {
+        // Play that noise!
+        AudioManager.Play(this.placeBuildingNoise);
+
         // Add the building
         let built;
         switch (building) {

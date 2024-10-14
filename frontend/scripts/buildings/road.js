@@ -32,17 +32,4 @@ export default class Road {
             lineDash: [3, 5]
         });
     }
-
-    // Find ALL roads that connect to a building
-    static FindRoads(building) {
-        let result = [];
-
-        BuildingManager.roads.forEach(a=>{
-            if (a.one === building || a.two === building) {
-                result.push(a);
-            }
-        });
-
-        return result;
-    }
 }
