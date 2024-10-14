@@ -79,9 +79,11 @@ export default class Cat {
         if (this.status.location.type === Building.WORKPLACE && this.status.walkingGoal === CatStatus.WORK) {
             this.status.state = CatStatus.WORK;
             AudioManager.Play(this.moneyNoises);
+            this.status.prevLocation = null;
         } else if (this.status.location === this.resides && this.status.walkingGoal === CatStatus.REST) {
             this.status.state = CatStatus.REST;
             AudioManager.Play(this.snoringNoises);
+            this.status.prevLocation = null;
         } else {
             this.status.state = CatStatus.WAIT;
             this.AttemptWalking();
