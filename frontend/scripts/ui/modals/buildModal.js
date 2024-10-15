@@ -114,6 +114,9 @@ export default class BuildModal {
     } 
 
     static MouseDown(x, y) {
+        // Check if the settings modal is shown
+        if (SettingsModal.isShown) return;
+
         // Check if we want to build something
         if (this.PointInside(0, x, y) && Game.money >= Building.houseData.cost) {
             BuildingManager.building = Building.HOUSE;

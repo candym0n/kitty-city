@@ -1,4 +1,4 @@
-import SettingsModal from "../ui/modals/settingsmodal.js";
+import SettingsModal from "../ui/modals/settingsModal.js";
 import CatImages from "./images/catimages.js";
 
 export default class AudioManager {
@@ -29,6 +29,12 @@ export default class AudioManager {
 
     // Play a sound effect
     static Play(effect) {
+        // Set the volume of the sound effect
+        effect.volume = SettingsModal.values.effectsVolume.value;
+
+        // Check if it is zero
+        if (effect === 0) return;
+
         effect.currentTime = 0;
         effect.play();
     }

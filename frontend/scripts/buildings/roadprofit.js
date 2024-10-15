@@ -20,11 +20,6 @@ export default class RoadProfit {
 
     // Find the profit of a road for a cat
     static FindProfit(road, cat) {
-        let result = [];
-        
-        // Find the direction that the cat is going
-        let direction = cat.status.location == road.one ? this.A_TO_B : this.B_TO_A;
-
         // Find the buildings
         let buildings = this.FindBuildings(cat.status.location, [road]);
 
@@ -65,7 +60,7 @@ export default class RoadProfit {
 
         // Repeat for every building connected via roads
         roads.forEach(road => {
-            // Ignore this road if it is it's origin
+            // Ignore this road if it has already been found
             if (alreadyFoundRoad.includes(road)) return;
 
             // The length accumulated from roads
@@ -86,7 +81,7 @@ export default class RoadProfit {
             alreadyFoundRoad.push(road);
 
             // Add all of the buildings connected to that, RECURSION BABY
-            const profits = RoadProfit.FindBuildings(other, other.roads, length, alreadyFoundRoad);
+            const profits = RoadProfit.FindBuildings(other, other.roads, length, [...alreadyFoundRoad]);
             result = result.concat(profits);
         });
 

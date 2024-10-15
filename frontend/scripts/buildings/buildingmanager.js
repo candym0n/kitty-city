@@ -228,9 +228,7 @@ export default class BuildingManager {
 
                 // Alert the buildings for a new road
                 this.selectedBuilding.roads.push(newRoad);
-                this.selectedBuilding.backwards.push(false);
                 newSelected.roads.push(newRoad);
-                newSelected.backwards.push(true);
 
                 // You aren't building the road anymore
                 if (!SettingsModal.values.maintainRoadBuild.checked) {

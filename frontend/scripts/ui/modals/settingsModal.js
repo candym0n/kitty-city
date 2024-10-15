@@ -16,7 +16,8 @@ export default class SettingsModal {
         redBoxes: document.querySelector("#show-red-boxes"),
         maintainRoadBuild: document.querySelector("#maintain-road"),
         buildDescription: document.querySelector("#build-description"),
-        maintainBuild: document.querySelector("#maintain-build")
+        maintainBuild: document.querySelector("#maintain-build"),
+        effectsVolume: document.querySelector("#sound-effects-volume")
     }
 
     // Is the modal shown?
