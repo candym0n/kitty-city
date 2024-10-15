@@ -1,17 +1,8 @@
 import Graphics from "./graphics/graphics.js";
 import EventHandler from "./ui/EventHandler.js";
 
-// Check if we are allowed to get rid of the GOD DAMN FOOTER
-let removeFooter = false;
-if (new URLSearchParams(location.search).has("hideFooter")) {
-    removeFooter = true;
-    document.querySelector("footer").remove();
-} else if (confirm("Do you want to hide that god damn footer?")) {
-    location.replace("?hideFooter=true");
-}
-
 // Init the graphics
-Graphics.Init(removeFooter);
+Graphics.Init();
 Graphics.camera.SetBoundaries(-1000, 1000, -1000, 1000);
 
 // Init the event handler

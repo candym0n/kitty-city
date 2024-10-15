@@ -26,11 +26,11 @@ export default class EventHandler {
 
     static #handleMouse(event, e) {
         // Take into account that GOD DAMN HEADER
-        let y = e.clientY - Graphics.HEADER_HEIGHT;
+        let y = e.clientY;
         if (y < 0) return;
     
-        // Take into account the footer
-        if (e.clientY > Graphics.canvas.width - Graphics.FOOTER_HEIGHT) return;
+        // Check if we are out of bounds
+        if (e.clientY > Graphics.canvas.height) return;
         
         EventHandler.TriggerEvent(event, [e.clientX, y]);
     }

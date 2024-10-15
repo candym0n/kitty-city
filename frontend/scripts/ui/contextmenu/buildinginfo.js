@@ -29,7 +29,7 @@ export default class BuildingInfo {
             base: ImageLoader.LoadImage("images/contextmenu/information.png"),
             overlay: true,
             width: 100,
-            height: 15,
+            height: 30,
             moveWithCamera: true
         });
 
@@ -37,7 +37,7 @@ export default class BuildingInfo {
             base: ImageLoader.LoadImage("images/contextmenu/delete.png"),
             overlay: true,
             width: 100,
-            height: 15,
+            height: 30,
             moveWithCamera: true
         });
 
@@ -45,7 +45,7 @@ export default class BuildingInfo {
         EventHandler.AddCallback("contextmenu", ((x, y) => {
             // Get the mouse position
             const selectedX = x + Graphics.camera.x;
-            const selectedY = y + Graphics.camera.y - BUILDING_SIZE; // IDK why it is shifted down by BUILDING_SIZE, fix this later
+            const selectedY = y + Graphics.camera.y;
 
             // Check if we have selected a building
             this.currentVictim = BuildingManager.GetSelectedBuilding(selectedX, selectedY);
@@ -58,7 +58,7 @@ export default class BuildingInfo {
 
             // Move the buttons
             this.informationButton.MoveTo(this.selectedX, this.selectedY);
-            this.deleteButton.MoveTo(this.selectedX, this.selectedY + 15);
+            this.deleteButton.MoveTo(this.selectedX, this.selectedY + this.informationButton.height);
         }).bind(this));
 
         this.deleteButton.AddCallback((() => {

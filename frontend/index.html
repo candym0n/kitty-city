@@ -30,22 +30,8 @@
         <link href="styles.css" rel="stylesheet">
     </head>
     <body>
-        <header id="header" class="fixed-top d-flex align-items-center header-transparent">
-            <div class="container d-flex align-items-center justify-content-between">
-                <div class="logo">
-                <h1><a href="index.html">Candyman.pink</a></h1>
-                </div>
-        
-                <nav id="navbar" class="navbar">
-                    <ul style="overflow:hidden!important">
-                        <li><a class="nav-link" href="https://candyman.pink/">Home</a></li>
-                        <li><a class="nav-link" href="https://candyman.pink/middle.html">Back</a></li></ul>
-                    <i class="bi bi-list mobile-nav-toggle"></i>
-                </nav>
-            </div>
-        </header>
         <main id="main">
-            <section style="padding-top:70px; padding-bottom:0px;">
+            <section class="px-0 py-0">
                 <canvas id="canvas"></canvas>
                 <!-- The Settings Modal -->
                 <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -67,6 +53,9 @@
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#audio">Audio</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-bs-toggle="tab" data-bs-target="#about">Credits</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -154,6 +143,17 @@
                                                 <input type="range" class="form-range" min="0" max="1" step="0.01" id="sound-effects-volume" value="1.0">
                                             </div>
                                         </div>
+                                        <div class="tab-pane fade" id="about">
+                                            <h4>Music</h4>
+                                            <ul>
+                                                <li>Hep Cats Kevin MacLeod (incompetech.com)<br/>
+                                                    Licensed under Creative Commons: By Attribution 3.0 License<br/>
+                                                    http://creativecommons.org/licenses/by/3.0/<br/>
+                                                </li>
+                                            </ul>
+                                            <h4>Bootstrap</h4>
+                                            <p>This page uses bootstrap. All of the bootstrap is located on <a target="_blank" href="https://candyman.pink">candyman.pink</a>, which is also a really great website that you should totally check out.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -163,15 +163,6 @@
                   </div>
             </section>
         </main>
-        <footer id="footer" style="position:absolute;bottom:0;width:100vw">
-            <div class="container">
-                <h3>Candyman.pink</h3>
-                <p>This is copied by itself. Do not question. No, really, don't. I'm warning you...</p>
-                <div class="copyright">
-                © Copyright <strong><span>Candyman.pink</span></strong>. All Of The Silly Rights Reserved
-                </div>
-            </div>
-        </footer>
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

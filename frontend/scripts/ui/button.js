@@ -77,6 +77,8 @@ export default class Button {
 
         if (this.ContainsPoint(x, y)) {
             this.status = STATUS.CLICK;
+            // Trigger callback
+            this.callbackFunctions.forEach(a=>a());
         }
     }
 
@@ -87,8 +89,6 @@ export default class Button {
 
         if (this.ContainsPoint(x, y)) {
             this.status = STATUS.HOVER;
-            // Trigger callback
-            this.callbackFunctions.forEach(a=>a());
         } else {
             this.status = STATUS.NORMAL;
         }

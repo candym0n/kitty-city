@@ -6,10 +6,6 @@ export default class Graphics {
     static canvas = document.querySelector("#canvas");
     static c = this.canvas.getContext("2d");
 
-    // The height of the header and footer combined
-    static HEADER_HEIGHT =  document.querySelector("header").getBoundingClientRect().height || 0;
-    static FOOTER_HEIGHT = document.querySelector("footer").getBoundingClientRect().height || 0;
-
     // The camera used for graphics
     static camera = new Camera(0, 0);
 
@@ -21,12 +17,7 @@ export default class Graphics {
     static mouseY = 0;
 
     // Init the graphics
-    static Init(removeFooter) {
-        // Check if we can REMOVE THAT GOD DAMN FOOTER
-        if (removeFooter) {
-            this.FOOTER_HEIGHT = 0;
-        }
-        
+    static Init() {
         // Resize the canvas
         this.canvas.width = this.GetWidth();
         this.canvas.height = this.GetHeight();
@@ -123,7 +114,7 @@ export default class Graphics {
         return window.innerWidth;
     }
     static GetHeight() {
-        return window.innerHeight - (this.HEADER_HEIGHT + this.FOOTER_HEIGHT);
+        return window.innerHeight;
     }
 
     // Draw an infinite background relative to the camera

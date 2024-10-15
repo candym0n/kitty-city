@@ -1,5 +1,7 @@
 import { BUILDING_SIZE, ROAD_WIDTH } from "../constants.js";
 import Graphics from "../graphics/graphics.js";
+import Maths from "../maths.js";
+import Building from "./building.js";
 import BuildingManager from "./buildingmanager.js";
 import RoadProfit from "./roadprofit.js";
 
@@ -16,10 +18,19 @@ export default class Road {
 
         // An ID for the road to identify it even when it has passed away
         this.id = Math.random();
+
+        // The type. It is a road. DUH.
+        this.type = Building.ROAD;
     }
 
+    // Draw the road
     Draw() {
         Road.DrawRoad(this.one.x + BUILDING_SIZE / 2, this.one.y + BUILDING_SIZE / 2, this.two.x + BUILDING_SIZE / 2, this.two.y + BUILDING_SIZE / 2);
+    }
+
+    // Determine whether a point lies in the road
+    ContainsPoint(x, y) {
+        return Maths.IsPointOnLine(this.one.x, this.one.y, this.two.x, this.two.y, x, y, ROAD_WIDTH);
     }
 
     // Draw a road
@@ -29,7 +40,7 @@ export default class Road {
         
         // Draw the white thing
         Graphics.DrawLine(x1, y1, x2, y2, ROAD_WIDTH / 4, "white", {
-            lineDash: [3, 5]
+            lineDash: [3, 5],
         });
     }
 }

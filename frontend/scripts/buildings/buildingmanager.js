@@ -45,6 +45,9 @@ export default class BuildingManager {
     // The place building sound effect
     static placeBuildingNoise = new Audio("audio/building/place.mp3");
 
+    // The destroying sound efing
+    static destroyBuildingNoise = new Audio("audio/building/explosion.mp3");
+
     // Are you currently building something?
     static get isBuilding() {
         return this.building !== Building.NOTHING;
@@ -331,6 +334,9 @@ export default class BuildingManager {
 
     // Destroy a building
     static DestroyBuilding(building) {
+        // Play that noise
+        AudioManager.Play(this.destroyBuildingNoise);
+
         // Delete the building
         switch (building.type) {
             case Building.HOUSE:
@@ -344,12 +350,13 @@ export default class BuildingManager {
                 break;
             case Building.INTERSECTION:
                 this.intersections = this.intersections.filter(a=>a !== building);
+                break;
         }
 
         // Send back cats who are walking on any connected roads
         for (let road of this.roads) {
             // Check if this is a connected road
-            if (road.one !== building && road.two !== building) return;
+            if (road.one !== building && road.two !== building) continue;
 
             // Find any cats walking down this road
             const cats = Cat.cats.filter(a=>a.status.walkingRoad === road);
