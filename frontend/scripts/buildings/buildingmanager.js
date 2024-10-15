@@ -8,10 +8,11 @@ import { BUILDING_SIZE, ROAD_HELPER_SIZE } from "../constants.js";
 import Road from "./road.js";
 import BuildModal from "../ui/modals/buildModal.js";
 import EventHandler from "../ui/EventHandler.js";
-import SettingsModal from "../ui/modals/settingsmodal.js";
+import SettingsModal from "../ui/modals/settingsModal.js";
 import Cat from "../cats/cat.js";
 import RoadProfit from "./roadprofit.js";
 import AudioManager from "../media/audio.js";
+import CatStatus from "../cats/catstatus.js";
 
 export default class BuildingManager {
     // The buildings that have been built
@@ -72,9 +73,14 @@ export default class BuildingManager {
     }
 
     // Build a building
-    static Build(building, x, y, name) {
+    static Build(building, x, y, name, free) {
         // Play that noise!
         AudioManager.Play(this.placeBuildingNoise);
+
+        // One last time, check if you have enough money
+        if (!free && Game.money < Building.GetCost(building)) {
+            this.building = Building.NOTHING;
+        }
 
         // Add the building
         let built;
@@ -100,7 +106,7 @@ export default class BuildingManager {
         }
 
         // Sorry, you're not building anymore, except if...
-        if (!(SettingsModal.values.maintainBuild && BuildModal.buildType === BuildModal.CLICKS)) {
+        if (!(SettingsModal.values.maintainBuild.checked && BuildModal.buildType === BuildModal.CLICKS)) {
             this.building = Building.NOTHING;
         }
     }
@@ -110,9 +116,9 @@ export default class BuildingManager {
         // Handle click click building
         if (BuildModal.buildType === BuildModal.CLICKS) {
             // Handle building for click click
-            if (this.buildClickMouseUp) {
+            if (this.buildClickMouseUp && !BuildModal.PointInside(BuildModal.clickedButton, x, y)) {
                 this.Build(this.building, x - BUILDING_SIZE / 2 + Graphics.camera.x, y - BUILDING_SIZE / 2 + Graphics.camera.y, "HI");
-                if (!SettingsModal.values.maintainBuild) {
+                if (!SettingsModal.values.maintainBuild.checked) {
                     this.buildClickMouseUp = false;
                 }
             } else {
@@ -154,7 +160,7 @@ export default class BuildingManager {
             if (this.roadClickMouseUp) {
                 this.AttemptBuildRoad(x, y);
 
-                if (SettingsModal.values.maintainBuild) {
+                if (SettingsModal.values.maintainBuild.checked) {
                     this.roadClickMouseUp = true;
                 } else {
                     this.roadClickMouseUp = false;
@@ -321,5 +327,50 @@ export default class BuildingManager {
     // Draw all of the roads
     static DrawRoads() {
         this.roads.forEach(a=>a.Draw());
+    }
+
+    // Destroy a building
+    static DestroyBuilding(building) {
+        // Delete the building
+        switch (building.type) {
+            case Building.HOUSE:
+                this.houses = this.houses.filter(a=>a !== building);
+
+                // KILL THE KITIZEN!
+                Cat.cats = Cat.cats.filter(a=>a.resides !== building);
+                break;
+            case Building.WORKPLACE:
+                this.workplaces = this.workplaces.filter(a=>a !== building);
+                break;
+            case Building.INTERSECTION:
+                this.intersections = this.intersections.filter(a=>a !== building);
+        }
+
+        // Send back cats who are walking on any connected roads
+        for (let road of this.roads) {
+            // Check if this is a connected road
+            if (road.one !== building && road.two !== building) return;
+
+            // Find any cats walking down this road
+            const cats = Cat.cats.filter(a=>a.status.walkingRoad === road);
+
+            cats.forEach(function(cat) {
+                // Make him go back to waiting
+                cat.status.walkingRoad = null;
+                cat.status.state = CatStatus.WAIT;
+                cat.status.walked = 0;
+
+                // Move him to a safe building
+                cat.status.location = road.one == building ? road.two : road.one;
+            });
+
+            // Find any buildings that are connected to this road
+            this.houses.forEach(a=>a.roads = a.roads.filter(b=>b!==road));
+            this.workplaces.forEach(a=>a.roads = a.roads.filter(b=>b!==road));
+            this.intersections.forEach(a=>a.roads = a.roads.filter(b=>b!==road));
+        }
+
+        // Get rid of the connected roads
+        this.roads = this.roads.filter(a=>a.one !== building && a.two !== building);
     }
 }

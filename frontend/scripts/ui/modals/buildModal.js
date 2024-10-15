@@ -2,10 +2,9 @@ import Building from "../../buildings/building.js";
 import BuildingManager from "../../buildings/buildingmanager.js";
 import { BUILDING_SIZE } from "../../constants.js";
 import Graphics from "../../graphics/graphics.js";
-import ImageLoader from "../../media/images/imageloader.js";
 import Game from "../../scenes/game.js";
 import EventHandler from "../EventHandler.js";
-import SettingsModal from "./settingsmodal.js";
+import SettingsModal from "./settingsModal.js";
 
 // The offset of every building
 const BUILDING_OFFSET = 50;

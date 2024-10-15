@@ -35,13 +35,17 @@ export default class EventHandler {
         EventHandler.TriggerEvent(event, [e.clientX, y]);
     }
 
-    // Init the events
     static Init() {
         document.addEventListener("mousedown", function(e) {
+            // Abort if it is not a left click
+            if (e.button !== 0) return;
+
             EventHandler.#handleMouse("mousedown", e);
         });
         
         document.addEventListener("mouseup", function(e) {
+            if (e.button !== 0) return;
+
             EventHandler.#handleMouse("mouseup", e);
         });
         
@@ -76,7 +80,7 @@ export default class EventHandler {
 
         document.addEventListener("contextmenu", function(e) {
             e.preventDefault();
-            EventHandler.TriggerEvent("contextmenu");
+            EventHandler.TriggerEvent("contextmenu", [e.clientX, e.clientY]);
         });
     }
 }

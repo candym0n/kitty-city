@@ -76,7 +76,14 @@ export default class Graphics {
         this.c.globalAlpha = options.opacity;
         this.c.fillStyle = color || "black";
         if (options.opacity === undefined) this.c.globalAlpha = 1;
-        this.c.fillRect(x, y, width, height);
+        if ("roundness" in options) {
+            this.c.beginPath();
+            this.c.roundRect(x, y, width, height, options.roundness);
+            this.c.closePath();
+            this.c.fill();
+        } else {
+            this.c.fillRect(x, y, width, height);
+        }
         this.c.globalAlpha = 1;
     }
 

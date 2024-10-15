@@ -4,7 +4,7 @@ import Graphics from "../graphics/graphics.js";
 import BuildModal from "./modals/buildModal.js";
 import Game from "../scenes/game.js";
 import Building from "../buildings/building.js";
-import SettingsModal from "./modals/settingsmodal.js";
+import SettingsModal from "./modals/settingsModal.js";
 import BuildingManager from "../buildings/buildingmanager.js";
 
 export default class Dashboard {
@@ -91,10 +91,10 @@ export default class Dashboard {
         });
 
         // Draw the buttons
-        this.stats.Draw(dt);
-        this.universalUpgrade.Draw(dt);
-        this.settings.Draw(dt);
-        this.build.Draw(dt);
+        this.stats.Draw();
+        this.universalUpgrade.Draw();
+        this.settings.Draw();
+        this.build.Draw();
 
         // Draw the build modal
         BuildModal.Draw();

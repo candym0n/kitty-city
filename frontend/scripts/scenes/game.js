@@ -5,7 +5,7 @@ import EventHandler from "../ui/EventHandler.js";
 import Scene from "./scene.js";
 import Dashboard from "../ui/dashboard.js";
 import BuildingManager from "../buildings/buildingmanager.js";
-import BuildModal from "../ui/modals/buildModal.js";
+import BuildingInfo from "../ui/contextmenu/buildinginfo.js";
 import Cat from "../cats/cat.js";
 
 export default class Game extends Scene {
@@ -28,6 +28,9 @@ export default class Game extends Scene {
 
         // Setup the building manager
         BuildingManager.Load();
+
+        // Setup the context menu
+        BuildingInfo.Load();
 
         // Start the game!
         this.Init();
@@ -65,6 +68,7 @@ export default class Game extends Scene {
         Cat.DrawCats();
         Dashboard.Draw();
         BuildingManager.DrawCurrentBuild();
+        BuildingInfo.Draw();
         
         // Do the fade in if we have to
         if (this.timeSinceStart < GAME_DELAY) {

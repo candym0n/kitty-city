@@ -98,7 +98,7 @@ export default class LoadingScene extends Scene {
         });
 
         // Draw the start button
-        this.startButton.Draw(dt);
+        this.startButton.Draw();
 
         // Make a cool fade if the button is clicked
         if (this.timeAccumulator >= 0) {

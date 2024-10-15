@@ -38,6 +38,9 @@ export default class Button {
         // The opacity of the button
         this.opacity = options.opacity || 1;
 
+        // Check if we want to move with the camera
+        this.moveWithCamera = options.moveWithCamera || false;
+
         // Add the events
         EventHandler.AddCallback("mousedown", this.MouseDown.bind(this));
         EventHandler.AddCallback("mouseup", this.MouseUp.bind(this));
@@ -56,6 +59,9 @@ export default class Button {
 
     // Called when the mouse moves
     MouseMove(x, y) {
+        x += this.moveWithCamera ? Graphics.camera.x : 0;
+        y += this.moveWithCamera ? Graphics.camera.y : 0;
+
         // Hover
         if (this.ContainsPoint(x, y)) {
             this.status = STATUS.HOVER;
@@ -66,6 +72,9 @@ export default class Button {
 
     // Called when the mouse clicks
     MouseDown(x, y) {
+        x += this.moveWithCamera ? Graphics.camera.x : 0;
+        y += this.moveWithCamera ? Graphics.camera.y : 0;
+
         if (this.ContainsPoint(x, y)) {
             this.status = STATUS.CLICK;
         }
@@ -73,6 +82,9 @@ export default class Button {
 
     // Called when the mouse is up
     MouseUp(x, y) {
+        x += this.moveWithCamera ? Graphics.camera.x : 0;
+        y += this.moveWithCamera ? Graphics.camera.y : 0;
+
         if (this.ContainsPoint(x, y)) {
             this.status = STATUS.HOVER;
             // Trigger callback
@@ -83,7 +95,7 @@ export default class Button {
     }
 
     // Draw the button in its current state
-    Draw(dt) {
+    Draw() {
         if (this.overlay && this.status !== STATUS.NORMAL) {
             Graphics.DrawRect(this.x, this.y, this.width, this.height, "black", {
                 opacity: this.status == STATUS.HOVER ? 0.25 : 0.5
@@ -112,5 +124,11 @@ export default class Button {
                 });
                 break;
         }
+    }
+
+    // Move to a location
+    MoveTo(x, y) {
+        this.x = x;
+        this.y = y;
     }
 }

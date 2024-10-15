@@ -67,4 +67,11 @@ export default class Building {
             height: BUILDING_SIZE
         });
     }
+
+    // Get the cost of a building
+    static GetCost(type) {
+        return type == Building.HOUSE ? this.houseData.cost :
+               type == Building.WORKPLACE ? this.workData.cost :
+               type == Building.INTERSECTION ? this.intersectionData.cost : 0;
+    }
 }
