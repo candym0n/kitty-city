@@ -16,9 +16,6 @@ export default class Road {
         // The length of the road
         this.length = Math.hypot(this.one.x - this.two.x, this.one.y - this.two.y);
 
-        // An ID for the road to identify it even when it has passed away
-        this.id = Math.random();
-
         // The type. It is a road. DUH.
         this.type = Building.ROAD;
     }
