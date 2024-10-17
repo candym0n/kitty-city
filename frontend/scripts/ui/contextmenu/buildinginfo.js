@@ -4,6 +4,7 @@ import Graphics from "../../graphics/graphics.js";
 import ImageLoader from "../../media/images/imageloader.js";
 import Button from "../button.js";
 import EventHandler from "../EventHandler.js";
+import BuildingInfoModal from "../modals/buildingInfoModal.js";
 
 export default class BuildingInfo {
     // The current thing that we are looking at
@@ -63,6 +64,12 @@ export default class BuildingInfo {
 
         this.deleteButton.AddCallback((() => {
             BuildingManager.DestroyBuilding(this.currentVictim);
+        }).bind(this));
+
+        this.informationButton.AddCallback((() => {
+            if (this.selectedVictim) {
+                BuildingInfoModal.ViewBuilding(this.currentVictim);
+            }
         }).bind(this));
 
         EventHandler.AddCallback("mousedown", () => {

@@ -91,7 +91,7 @@ export default class BuildingManager {
             case Building.HOUSE:
                 built = new House(x, y, name);
                 this.houses.push(built);
-                Game.money -= Building.houseData.cost;
+                if (!free) Game.money -= Building.houseData.cost;
 
                 // Create a new cat
                 Cat.AddCat(built);
@@ -99,12 +99,12 @@ export default class BuildingManager {
             case Building.WORKPLACE:
                 built = new Workplace(x, y, name);
                 this.workplaces.push(built);
-                Game.money -= Building.workData.cost;
+                if (!free) Game.money -= Building.workData.cost;
                 break;
             case Building.INTERSECTION:
                 built = new Intersection(x, y, name);
                 this.intersections.push(built);
-                Game.money -= Building.intersectionData.cost;
+                if (!free) Game.money -= Building.intersectionData.cost;
                 break;
         }
 

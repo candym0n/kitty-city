@@ -34,11 +34,11 @@
             <section class="px-0 py-0">
                 <canvas id="canvas"></canvas>
                 <!-- The Settings Modal -->
-                <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsTitle" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLongTitle">Settings</h5>
+                          <h5 class="modal-title" id="settingsTitle">Settings</h5>
                           <button id="close-settings" type="button" class="btn-close"></button>
                         </div>
                         <div class="modal-body">
@@ -160,7 +160,42 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                </div>
+
+                <!-- The Building Info Modal -->
+                <div class="modal fade" id="buildingInfoModal" tabindex="-1" role="dialog" aria-labelledby="buildingInfoTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="buildingInfoTitle">Building Info</h5>
+                          <button id="close-info" type="button" class="btn-close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-3 sidebar">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#" data-bs-toggle="tab" data-bs-target="#basic-info">Basic</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-9">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="basic-info">
+                                            <div class="input-group">
+                                                <span class="input-group-text">Name:</span>
+                                                <input class="form-control" id="info-building-name"/>
+                                            </div>
+                                            
+                                            <p class="info-text">Type: <span id="info-building-type"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
             </section>
         </main>
 

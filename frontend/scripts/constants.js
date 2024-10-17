@@ -1,5 +1,5 @@
 // Do you want to demo the game to someone?
-const DEMO_GAME = true;
+const DEMO_GAME = false;
 
 // How many distinct cat images are there?
 const NUM_CATS = 13;

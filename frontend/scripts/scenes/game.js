@@ -7,6 +7,8 @@ import Dashboard from "../ui/dashboard.js";
 import BuildingManager from "../buildings/buildingmanager.js";
 import BuildingInfo from "../ui/contextmenu/buildinginfo.js";
 import Cat from "../cats/cat.js";
+import BuildingInfoModal from "../ui/modals/buildingInfoModal.js";
+import Building from "../buildings/building.js";
 
 export default class Game extends Scene {
     // The amount of time since the game has started
@@ -26,18 +28,18 @@ export default class Game extends Scene {
         EventHandler.AddCallback("keydown", Graphics.camera.KeyDown.bind(Graphics.camera));
         EventHandler.AddCallback("keyup", Graphics.camera.KeyUp.bind(Graphics.camera));
 
-        // Setup the building manager
+        // Setup the neccessary things
         BuildingManager.Load();
-
-        // Setup the context menu
         BuildingInfo.Load();
+        BuildingInfoModal.Init();
 
         // Start the game!
         this.Init();
     }
 
     static Init() {
-
+        // Build a house
+        BuildingManager.Build(Building.HOUSE, 500, 500, "hi", true);
     }
 
     static Update(dt) {
