@@ -58,6 +58,16 @@ export default class BuildingManager {
         // Setup some events
         EventHandler.AddCallback("mouseup", this.MouseUp.bind(this));
         EventHandler.AddCallback("mousedown", this.MouseDown.bind(this));
+        EventHandler.AddCallback("keydown", ((key) => {
+            // Only do escape
+            if (key !== "Escape") return;
+
+            // No more building
+            this.building = Building.NOTHING;
+            this.buildingRoad = false;
+            this.roadClickMouseUp = false;
+            this.buildClickMouseUp = false;
+        }).bind(this));
 
         // Add the settings
         SettingsModal.AddCallback(SettingsModal.values.roadClick, (() => {
@@ -83,6 +93,7 @@ export default class BuildingManager {
         // One last time, check if you have enough money
         if (!free && Game.money < Building.GetCost(building)) {
             this.building = Building.NOTHING;
+            return;
         }
 
         // Add the building
@@ -116,26 +127,26 @@ export default class BuildingManager {
 
     // Handle building mouse up
     static #BuildMouseUp(x, y) {
+        // Check if we are doing the COMBO WOMBO for building
+        if (BuildModal.hybridBuild) {
+            if (BuildModal.PointInside(BuildModal.clickedButton, x, y) || this.buildClickMouseUp) {
+                BuildModal.buildType = BuildModal.CLICKS;
+            } else {
+                BuildModal.buildType = BuildModal.DRAG_DROP;
+            }
+        }
+
         // Handle click click building
         if (BuildModal.buildType === BuildModal.CLICKS) {
             // Handle building for click click
             if (this.buildClickMouseUp && !BuildModal.PointInside(BuildModal.clickedButton, x, y)) {
                 this.Build(this.building, x - BUILDING_SIZE / 2 + Graphics.camera.x, y - BUILDING_SIZE / 2 + Graphics.camera.y, "HI");
-                if (!SettingsModal.values.maintainBuild.checked) {
-                    this.buildClickMouseUp = false;
-                }
+                this.buildClickMouseUp = SettingsModal.values.maintainBuild.checked;
             } else {
                 this.buildClickMouseUp = true;
             }
-        }
 
-        // Check if we are doing the COMBO WOMBO for building
-        if (BuildModal.hybridBuild) {
-            if (BuildModal.PointInside(BuildModal.clickedButton, x, y)) {
-                BuildModal.buildType = BuildModal.CLICKS;
-            } else {
-                BuildModal.buildType = BuildModal.DRAG_DROP;
-            }
+            return;
         }
 
         // Handle drag drop building
@@ -151,7 +162,7 @@ export default class BuildingManager {
 
         // Check if we are doing the COMBO WOMBO for roads
         if (this.hybridBuild) {
-            if (this.selectedBuilding.Contains(x + Graphics.camera.x, y + Graphics.camera.y)) {
+            if (this.selectedBuilding.Contains(x + Graphics.camera.x, y + Graphics.camera.y) || this.roadClickMouseUp) {
                 this.buildType = BuildModal.CLICKS;
             } else {
                 this.buildType = BuildModal.DRAG_DROP;
@@ -161,17 +172,17 @@ export default class BuildingManager {
         // Handle click click road
         if (this.buildType === BuildModal.CLICKS) {
             if (this.roadClickMouseUp) {
-                this.AttemptBuildRoad(x, y);
+                let newBuilding = this.AttemptBuildRoad(x, y);
 
-                if (SettingsModal.values.maintainBuild.checked) {
-                    this.roadClickMouseUp = true;
-                } else {
-                    this.roadClickMouseUp = false;
-                }
-                
+                // Set the first building to this new building
+                this.selectedBuilding = newBuilding;
+
+                this.roadClickMouseUp = SettingsModal.values.maintainBuild.checked;
             } else {
                 this.roadClickMouseUp = true;
             }
+
+            return;
         }
 
         // Build a road if we have selected another building
@@ -255,6 +266,8 @@ export default class BuildingManager {
 
             this.selectedBuilding = null;
         }
+
+        return newSelected;
     }
 
     // Get a selected building

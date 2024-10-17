@@ -29,9 +29,6 @@ export default class Building {
 
         // The roads that the building touches
         this.roads = [];
-
-        // A random ID for path finding
-        this.id = Math.random();
     }
 
     // Update the building
