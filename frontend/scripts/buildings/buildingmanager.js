@@ -93,7 +93,7 @@ export default class BuildingManager {
         // One last time, check if you have enough money
         if (!free && Game.money < Building.GetCost(building)) {
             this.building = Building.NOTHING;
-            return;
+            return null;
         }
 
         // Add the building
@@ -123,6 +123,8 @@ export default class BuildingManager {
         if (!(SettingsModal.values.maintainBuild.checked && BuildModal.buildType === BuildModal.CLICKS)) {
             this.building = Building.NOTHING;
         }
+
+        return built;
     }
 
     // Handle building mouse up

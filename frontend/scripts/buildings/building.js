@@ -31,6 +31,11 @@ export default class Building {
         this.roads = [];
     }
 
+    // Is the building special?
+    get isSpecial() {
+        return this.type === Building.HOUSE || this.type === Building.WORKPLACE;
+    }
+
     // Update the building
     Update(dt) {
         

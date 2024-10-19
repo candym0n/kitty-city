@@ -18,6 +18,12 @@ export default class Road {
 
         // The type. It is a road. DUH.
         this.type = Building.ROAD;
+
+        // The distances to important buildings
+        this.distances = [];
+
+        // Run the update road on build function
+        RoadProfit.RoadOnBuild(this);
     }
 
     // Draw the road
@@ -28,6 +34,11 @@ export default class Road {
     // Determine whether a point lies in the road
     ContainsPoint(x, y) {
         return Maths.IsPointOnLine(this.one.x, this.one.y, this.two.x, this.two.y, x, y, ROAD_WIDTH);
+    }
+
+    // Get the connected roads (by immediate buildings)
+    get connectedRoads() {
+        return this.one.roads.concat(this.two.roads);
     }
 
     // Draw a road

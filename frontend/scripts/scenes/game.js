@@ -9,6 +9,8 @@ import BuildingInfo from "../ui/contextmenu/buildinginfo.js";
 import Cat from "../cats/cat.js";
 import BuildingInfoModal from "../ui/modals/buildingInfoModal.js";
 import Building from "../buildings/building.js";
+import RoadProfit from "../buildings/roadprofit.js";
+import Road from "../buildings/road.js";
 
 export default class Game extends Scene {
     // The amount of time since the game has started
@@ -38,8 +40,8 @@ export default class Game extends Scene {
     }
 
     static Init() {
-        // Build a house
-        BuildingManager.Build(Building.HOUSE, 500, 500, "hi", true);
+        let h1 = BuildingManager.Build(Building.HOUSE, 500, 500, "hi", true);
+        
     }
 
     static Update(dt) {

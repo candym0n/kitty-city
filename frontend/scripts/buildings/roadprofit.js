@@ -1,27 +1,20 @@
 import CatStatus from "../cats/catstatus.js";
 import Building from "./building.js";
+import Road from "./road.js";
 
-// Connects buildings with roads
 export default class RoadProfit {
-    // The directions that you could go
-    static A_TO_B = 0;
-    static B_TO_A = 1;
-
-    constructor(direction, building, length) {
-        // Which direction do you have to go?
-        this.direction = direction;
-
+    constructor(building, length) {
         // Which building will you get to?
         this.building = building;
 
         // What is the length it will take to get there?
         this.length = length;
     }
-
+    
     // Find the profit of a road for a cat
     static FindProfit(road, cat) {
         // Find the buildings
-        let buildings = this.FindBuildings(cat.status.location, [road]);
+        let buildings = road.distances;
 
         // Check what we want to do and calculuate profability accordingly
         if (cat.status.walkingGoal === CatStatus.REST) {
@@ -54,37 +47,93 @@ export default class RoadProfit {
         }
     }
 
-    // Find all of the buildings that a building leads to via recursion
-    static FindBuildings(building, roads=building.roads, accumulatedLength=0, alreadyFoundRoad=[]) {
-        let result = [];
+    // Find R* (immediate important buildings) for a road
+    static FindImmediateBuildings(road) {
+        // Check building one
+        if (road.one.isSpecial) road.distances.push(new RoadProfit(road.one, road.length));
 
-        // Repeat for every building connected via roads
-        roads.forEach(road => {
-            // Ignore this road if it has already been found
-            if (alreadyFoundRoad.includes(road)) return;
+        // Check building two
+        if (road.two.isSpecial) road.distances.push(new RoadProfit(road.two, road.length));
+    }
 
-            // The length accumulated from roads
-            let length = accumulatedLength;
+    // Run the formula R = R + (L(R) + R') on two roads R and R'
+    static RoadFormula(one, two, oneLength) {
+        // Find the road profits with the length of the first road added to it
+        const plusLength = two.map(profit => new RoadProfit(profit.building, profit.length + oneLength));
 
-            // Find the building
-            const other = road.one === building ? road.two : road.one;
+        // Add the two lists together (overlapping buildings will just be minimum length)
+        const finalList = this.#AddLists(one, plusLength);
 
-            // Add to the length
-            length += road.length;
+        // Here it is!
+        return finalList;
+    }
 
-            // Is that building special, and it is not the original building?
-            if ((other.type === Building.WORKPLACE || other.type === Building.HOUSE)) {
-                result.push(new RoadProfit(road.one === building ? RoadProfit.A_TO_B : RoadProfit.B_TO_A, other, length));
+    // Add two profit lists together (concat, any overlaps will just keep the one with minimum length)
+    static #AddLists(one, two) {
+        // The map to store buildings and length
+        const map = new Map();
+
+        // Iterate through one and add buildings to the map
+        for (const item of one) {
+            // Get the building
+            const { building } = item;
+
+            // Check if there is already one like this
+            const existingEntry = map.get(building);
+            if (!existingEntry || item.length < existingEntry?.length) {
+                map.set(building, item);
             }
+        }
 
-            // Add it to the already found road list
-            alreadyFoundRoad.push(road);
+        // Iterate through two and add buildings to the map
+        for (const item of two) {
+            // Get the building
+            const { building } = item;
 
-            // Add all of the buildings connected to that, RECURSION BABY
-            const profits = RoadProfit.FindBuildings(other, other.roads, length, [...alreadyFoundRoad]);
-            result = result.concat(profits);
-        });
+            // Check if there is already one like this
+            const existingEntry = map.get(building);
+            if (!existingEntry || item.length < existingEntry?.length) {
+                map.set(building, item);
+            }
+        }
 
-        return result;
+        // Convert it to an array
+        return Array.from(map.values());
+    }
+
+    // Function ran whenever a road is built
+    static RoadOnBuild(road) {
+        // Find the immediate buildings
+        this.FindImmediateBuildings(road);
+
+        // Update the distances
+        let connectedRoads = road.connectedRoads;
+        
+        // Find the distances for this road
+        for (const connectedRoad of connectedRoads) {
+            // Run the road formula on the road
+            road.distances = this.RoadFormula(road.distances, connectedRoad.distances, road.length);
+        }
+
+        // Update distances for other roads
+        for (const connectedRoad of connectedRoads) {
+            this.UpdateConnectedRoad(road, connectedRoad);
+        }
+    }
+    
+    // Update roads connnected to another road using the road formula (and recursion!)
+    static UpdateConnectedRoad(originRoad, toUpdate, alreadyFound=[], accumulatedLength=originRoad.length) {
+        // Update this road
+        toUpdate.distances = this.RoadFormula(toUpdate.distances, originRoad.distances, accumulatedLength);
+
+        // Update each road connected to this one
+        const connectedRoads = toUpdate.connectedRoads;
+        for (const connected of connectedRoads) {
+            // Check if we already updated this one
+            if (alreadyFound.includes(connected)) continue;
+
+            // Update it!
+            this.UpdateConnectedRoad(originRoad, connected, [...alreadyFound, toUpdate], accumulatedLength + connected.length);
+        }
     }
 }
