@@ -122,15 +122,21 @@ export default class RoadProfit {
     }
     
     // Update roads connnected to another road using the road formula (and recursion!)
-    static UpdateConnectedRoad(originRoad, toUpdate, alreadyFound=[], accumulatedLength=originRoad.length) {
+    static UpdateConnectedRoad(originRoad, toUpdate, alreadyFound=[], accumulatedLength=originRoad.length, buildingsFound=[]) {
         // Update this road
         toUpdate.distances = this.RoadFormula(toUpdate.distances, originRoad.distances, accumulatedLength);
 
-        // Update each road connected to this one
+        // Update each buildings' road connected to this one
         const connectedRoads = toUpdate.connectedRoads;
         for (const connected of connectedRoads) {
             // Check if we already updated this one
             if (alreadyFound.includes(connected)) continue;
+
+            // Did we already check it?
+            if (buildingsFound.includes(connected.one)) continue;
+
+            // Add it!
+            buildingsFound.push(connected.one);
 
             // Update it!
             this.UpdateConnectedRoad(originRoad, connected, [...alreadyFound, toUpdate], accumulatedLength + connected.length);
