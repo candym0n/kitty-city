@@ -14,7 +14,7 @@ export default class Cat {
     // The cats to be drawn
     static cats = [];
 
-    constructor(resides, image, name = "Kitizen") {
+    constructor(resides, image, name = "Kitizen", isClone=false) {
         // Where does the cat live?
         this.resides = resides;
 
@@ -30,6 +30,15 @@ export default class Cat {
         // The sound effects of the cat
         this.snoringNoises = new Audio("audio/cat/snore.mp3");
         this.moneyNoises = new Audio("audio/cat/money.mp3");
+
+        // The path we should follow
+        this.path = [this.resides];
+
+        // The shadow clone
+        if (!isClone) this.shadowClone = new Cat(this.resides, this.image, "Shadow clone", true);
+
+        // What iteration are you of your path?
+        this.pathIteration = 1;
     }
 
     // Update a cat
@@ -37,8 +46,14 @@ export default class Cat {
         // Add to the time accumulator
         this.status.accumulator += dt;
 
+        // Update the path
+        this.FindPath();
+
         switch (this.status.state) {
             case CatStatus.REST:
+                // Attempt to find path to work
+                this.FindPath();
+
                 // Are we done sleeping?
                 if (this.status.accumulator >= this.status.sleepTime) {
                     this.status.walkingGoal = CatStatus.WORK;
@@ -47,6 +62,9 @@ export default class Cat {
                 }
                 break;
             case CatStatus.WORK:
+                // Attempt to find path home
+                this.FindPath();
+
                 // Are we done working?
                 if (this.status.accumulator >= this.status.workTime) {
                     Game.money += this.status.location.profit;
@@ -79,11 +97,13 @@ export default class Cat {
         if (this.status.location.type === Building.WORKPLACE && this.status.walkingGoal === CatStatus.WORK) {
             this.status.state = CatStatus.WORK;
             AudioManager.Play(this.moneyNoises);
-            this.status.prevLocation = null;
+            this.path = [this.status.location];
+            this.pathIteration = 0;
         } else if (this.status.location === this.resides && this.status.walkingGoal === CatStatus.REST) {
             this.status.state = CatStatus.REST;
             AudioManager.Play(this.snoringNoises);
-            this.status.prevLocation = null;
+            this.path = [this.resides];
+            this.pathIteration = 0;
         } else {
             this.status.state = CatStatus.WAIT;
             this.AttemptWalking();
@@ -91,6 +111,9 @@ export default class Cat {
 
         // Reset the accumulator
         this.status.accumulator = 0;
+
+        // Add one to the path iteration
+        this.pathIteration += 1;
     }
 
     // Try to switch to walking
@@ -104,28 +127,30 @@ export default class Cat {
         const road = this.FindRoad(this.status.location);
 
         // Do we have a road?
-        if (!road[0]) return;
+        if (!road) return;
 
         // We can FINALLY switch to walking!
         this.status.state = CatStatus.WALK;
         this.status.walked = 0;
-        this.status.walkingRoad = road[0];
-        this.status.backwards = road[1];
+        this.status.walkingRoad = road;
+        this.status.backwards = road.two === this.status.location;
     }
 
     // Find a road to get to fufill your goal
     FindRoad() {
         // Check if we have any roads
-        if (this.status.location.roads.length === 0) return [];
+        if (this.status.location.roads.length === 0) return;
 
-        // Select the road with the most profitability
-        const profatibility = this.status.location.roads.map((road => [RoadProfit.FindProfit(road, this), road]).bind(this));
-        const best = profatibility.reduce((lowest, current) => (current[0] > lowest[0] ? current : lowest))[1];
+        // Check if our path is broken
+        if (this.path.length <= this.pathIteration) return this.status.location.roads[0];
 
-        // Calculuate the direction that the cat is walking on the road
-        const back = this.status.location == best.two;
-
-        return [best, back];
+        // Go through every road
+        for (const road of this.status.location.roads) {
+            // Check if it is next in our path
+            if (this.path[this.pathIteration] == road) {
+                return road;
+            }
+        }
     }
 
     // Add a cat
@@ -152,6 +177,35 @@ export default class Cat {
     // Update ALL of the cats
     static Update(dt) {
         this.cats.forEach(a=>a.Update(dt));
+    }
+
+    // Find a path
+    FindPath() {
+        // Find the last building in the path
+        const lastBuilding = this.path[this.path.length - 1];
+
+        // Check if we found something
+        if (lastBuilding === Building.WORKPLACE && this.status.walkingGoal === CatStatus.WORK ||
+            lastBuilding === this.resides && this.status.walkingGoal === CatStatus.REST
+        ) {
+            return;
+        }
+
+        // Check if we have any roads
+        if (this.shadowClone.status.location.roads.length === 0) return;
+
+        // Select the road with the most profitability
+        const profatibility = this.shadowClone.status.location.roads.map((road => [RoadProfit.FindProfit(road, this.shadowClone), road]).bind(this));
+        const best = profatibility.reduce((lowest, current) => (current[0] > lowest[0] ? current : lowest))[1];
+
+        // Calculuate the direction that the cat is walking on the road
+        const back = this.shadowClone.status.location == best.two;
+
+        // Move the shadow clone
+        this.shadowClone.status.location = back ? best.one : best.two;
+
+        // Add to the path
+        this.path.push(best);
     }
 
     // Draw a cat

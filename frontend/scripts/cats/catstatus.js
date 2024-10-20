@@ -29,6 +29,9 @@ export default class CatStatus {
     // Are you walking backwards? (two -> one instead of one -> two)
     backwards = false;
 
+    // What is the path that you decided while you fell asleep?
+    path = [];
+
     constructor(home) {
         // The state of the cat
         this.state = CatStatus.REST;
