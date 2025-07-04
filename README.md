@@ -33,7 +33,8 @@
 ### Method two (always up to date)
 1. Setup a database (use your own method if you have one)
     1. Install [XAMPP](https://www.apachefriends.org/)
-    2. Import database.sql
+    2. CREATE DATABASE `kitty_city`
+    3. Import database.sql
 2. Start the backend (under the backend folder run npm start)
 2. Run it on localhost (use python3 -m http.server 8080 in the frontend folder, or if you have some other method)
 3. Enjoy! (Arguably the most crucial step in the entire process)
