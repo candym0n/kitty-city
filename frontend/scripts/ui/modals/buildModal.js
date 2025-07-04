@@ -116,34 +116,41 @@ export default class BuildModal {
         // Check if the settings modal is shown
         if (SettingsModal.isShown) return;
 
-        // Check if we want to build something
+        // Reset the selected building
+        BuildingManager.selectedBuilding = null;
+
+        // Check if we want to do road
+        if (this.PointInside(3, x, y)) {
+            // Toggle the road building
+            BuildingManager.buildingRoad = !BuildingManager.buildingRoad;
+            BuildingManager.building = Building.NOTHING;
+            this.clickedButton = 3;
+            return;
+        }
+
+        // No, we are not building a road
+        BuildingManager.buildingRoad = false;
+
+        // Check if we've selected something else
         if (this.PointInside(0, x, y) && Game.money >= Building.houseData.cost) {
-            BuildingManager.building = Building.HOUSE;
+            BuildingManager.building = BuildingManager.building == Building.HOUSE ? Building.NOTHING : Building.HOUSE;
             BuildingManager.buildingRoad = false;
             BuildingManager.selectedBuilding = null;
             this.clickedButton = 0;
         }
 
         if (this.PointInside(1, x, y) && Game.money >= Building.workData.cost) {
-            BuildingManager.building = Building.WORKPLACE;
+            BuildingManager.building = BuildingManager.building == Building.WORKPLACE ? Building.NOTHING : Building.WORKPLACE;
             BuildingManager.buildingRoad = false;
             BuildingManager.selectedBuilding = null;
             this.clickedButton = 1;
         }
 
         if (this.PointInside(2, x, y) && Game.money >= Building.intersectionData.cost) {
-            BuildingManager.building = Building.INTERSECTION;
+            BuildingManager.building = BuildingManager.building == Building.INTERSECTION ? Building.NOTHING : Building.INTERSECTION;
             BuildingManager.buildingRoad = false;
             BuildingManager.selectedBuilding = null;
             this.clickedButton = 2;
-        }
-
-        // Check if we want to do road
-        if (this.PointInside(3, x, y)) {
-            BuildingManager.buildingRoad = !BuildingManager.buildingRoad;
-            BuildingManager.building = Building.NOTHING;
-            BuildingManager.selectedBuilding = null;
-            this.clickedButton = 3;
         }
     }
 
