@@ -150,13 +150,13 @@ export default class BuildModal {
     static MouseMove(x, y) {
         // Set the description
         if (this.PointInside(0, x, y)) {
-            this.descriptionText = Building.houseData.description;
+            this.descriptionText = "House: " + Building.houseData.description;
         } else if (this.PointInside(1, x, y)) {
-            this.descriptionText = Building.workData.description;
+            this.descriptionText = "Work: " + Building.workData.description;
         } else if (this.PointInside(2, x, y)) {
-            this.descriptionText = Building.intersectionData.description;
+            this.descriptionText = "Intersection: " + Building.intersectionData.description;
         } else if (this.PointInside(3, x, y)) {
-            this.descriptionText = Building.roadData.description;
+            this.descriptionText = "Road: " + Building.roadData.description;
         } else {
             this.descriptionText = "Hover a building to see what it is!";
         }

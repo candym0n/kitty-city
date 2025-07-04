@@ -10,7 +10,6 @@ import BuildModal from "../ui/modals/buildModal.js";
 import EventHandler from "../ui/EventHandler.js";
 import SettingsModal from "../ui/modals/settingsModal.js";
 import Cat from "../cats/cat.js";
-import RoadProfit from "./roadprofit.js";
 import AudioManager from "../media/audio.js";
 import CatStatus from "../cats/catstatus.js";
 
@@ -384,7 +383,7 @@ export default class BuildingManager {
                 cat.status.location = road.one == building ? road.two : road.one;
             });
 
-            // Find any buildings that are connected to this road
+            // Update any buildings that are connected to this road
             this.houses.forEach(a=>a.roads = a.roads.filter(b=>b!==road));
             this.workplaces.forEach(a=>a.roads = a.roads.filter(b=>b!==road));
             this.intersections.forEach(a=>a.roads = a.roads.filter(b=>b!==road));

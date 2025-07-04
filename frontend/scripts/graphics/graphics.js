@@ -118,18 +118,30 @@ export default class Graphics {
     }
 
     // Draw an infinite background relative to the camera
-    static DrawInfiniteBackground(image) {
-        let x = Math.floor(this.camera.x / this.canvas.width) * this.canvas.width;
-        let y = Math.floor(this.camera.y / this.canvas.height) * this.canvas.height;
-        this.DrawImage(image, x, y, { width: this.canvas.width, height: this.canvas.height });
-        this.DrawImage(image, x + this.canvas.width, y, { width: this.canvas.width, height: this.canvas.height });
-        this.DrawImage(image, x - this.canvas.width, y, { width: this.canvas.width, height: this.canvas.height });
-        this.DrawImage(image, x, y + this.canvas.height, { width: this.canvas.width, height: this.canvas.height });
-        this.DrawImage(image, x, y - this.canvas.height, { width: this.canvas.width, height: this.canvas.height });
-        this.DrawImage(image, x - this.canvas.height, y - this.canvas.height, { width: this.canvas.width, height: this.canvas.height });
-        this.DrawImage(image, x + this.canvas.width, y + this.canvas.height, { width: this.canvas.width, height: this.canvas.height });
-        this.DrawImage(image, x + this.canvas.width, y - this.canvas.height, { width: this.canvas.width, height: this.canvas.height });
-        this.DrawImage(image, x - this.canvas.width, y + this.canvas.height, { width: this.canvas.width, height: this.canvas.height });
+    static DrawInfiniteBackground(image, scaleFactor = 5) {
+        // Calculate tile dimensions based on scale factor
+        const tileWidth = this.canvas.width / scaleFactor;
+        const tileHeight = this.canvas.height / scaleFactor;
+
+        // Calculate the starting tile position based on camera position
+        const startTileX = Math.floor(this.camera.x / tileWidth);
+        const startTileY = Math.floor(this.camera.y / tileHeight);
+
+        // Calculate how many tiles we need to cover the screen plus buffer
+        const tilesNeededX = Math.ceil(this.canvas.width / tileWidth) + 1;
+        const tilesNeededY = Math.ceil(this.canvas.height / tileHeight) + 1;
+
+        // Draw tiles in a grid pattern to cover the visible area
+        for (let i = -1; i <= tilesNeededX; i++) {
+            for (let j = -1; j <= tilesNeededY; j++) {
+                const x = (startTileX + i) * tileWidth;
+                const y = (startTileY + j) * tileHeight;
+                this.DrawImage(image, x, y, {
+                    width: tileWidth,
+                    height: tileHeight
+                });
+            }
+        }
     }
 
     // Draw a line

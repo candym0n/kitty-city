@@ -6,7 +6,6 @@ import CatImages from "../media/images/catimages.js";
 import CatStatus from "./catstatus.js";
 import Maths from "../maths.js";
 import Game from "../scenes/game.js";
-import RoadProfit from "../buildings/roadprofit.js";
 import AudioManager from "../media/audio.js";
 
 // Kitizen, Kitty, Feline friend - take your pick
@@ -95,13 +94,8 @@ export default class Cat {
 
     // Try to switch to walking
     AttemptWalking() {
-        // Find where you want to go
-        const where = this.status.walkingGoal === CatStatus.WORK ? Building.WORKPLACE :
-                      this.status.walkingGoal === CatStatus.REST ? Building.HOUSE :
-                      Building.INTERSECTION;
-
         // Try to find a road
-        const road = this.FindRoad(this.status.location);
+        const road = this.FindRoad();
 
         // Do we have a road?
         if (!road[0]) return;
@@ -119,8 +113,9 @@ export default class Cat {
         if (this.status.location.roads.length === 0) return [];
 
         // Select the road with the most profitability
-        const profatibility = this.status.location.roads.map((road => [RoadProfit.FindProfit(road, this), road]).bind(this));
-        const best = profatibility.reduce((lowest, current) => (current[0] > lowest[0] ? current : lowest))[1];
+        const best = this.status.location.roads.reduce((highest, current) => (
+            (!current || (current.FindProfit(this) < highest.FindProfit(this))) ? highest : current
+        ));
 
         // Calculuate the direction that the cat is walking on the road
         const back = this.status.location == best.two;
